@@ -1,5 +1,9 @@
 grammar FJP;
-S  : 'start' PROGRAM 'end' ;
+r
+:
+    'start' PROGRAM 'end'
+;
+
 PROGRAM
 :
    VARIABLES
@@ -13,17 +17,18 @@ VARIABLES
 
 VARIABLE
 :
-    VARIABLE_NAME ':=' VALUE ';'
+    VARIABLE_NAME ';'
+    | VARIABLE_NAME ':=' VALUE ';'
 ;
 
 VARIABLE_NAME
 :
-[ \t\r\n]+ -> skip
+    [a-z]+
 ;
 
 VALUE
 :
-[ \t\r\n]+ -> skip
+    [a-z]+
 ;
 
 FUNCTIONS
@@ -34,11 +39,15 @@ FUNCTIONS
 
 FUNCTION
 :
-    [ \t\r\n]+ -> skip
+    [a-z]+
 ;
 
 MAIN
 :
-    [ \t\r\n]+ -> skip
+    [a-z]+
+;
 
+WS
+:
+    [ \t\r\n]+ -> skip
 ;
