@@ -14,11 +14,11 @@ boolean_var : BOOLEAN ID ASSIGN BOOLEAN_VALUE SEMI;
 argument    : INT ID | BOOLEAN ID;
 body   : START statement* END;
 statement   : call
-            | while_c
+            | while_cycle
             | assigment;
 
 call        : CALL ID LPAREN var (COMMA var)* RPAREN SEMI;
-while_c     : WHILE LPAREN expression RPAREN START statement* END;
+while_cycle : WHILE LPAREN expression RPAREN START statement* END;
 assigment   : ID ASSIGN (var | expression) SEMI;
 
 var         : INT_VALUE | BOOLEAN_VALUE | ID;
