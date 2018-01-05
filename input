@@ -1,14 +1,18 @@
+start
+    const KONSTANTA := 5;
+    int x := 2;
 
+    procedure delej (int a)
+    start
+        while (a < KONSTANTA)
+        start
+            x := x + 1;
+            a := a + 1;
+        end
+    end
 
-
-
-
-
-var age, weekdays : integer;
-
-START PROGRAM
-begin
-
-
-
+    main
+    start
+        call delej(3);
+    end
 end
