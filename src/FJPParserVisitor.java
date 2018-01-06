@@ -64,6 +64,18 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBody(FJPParser.BodyContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FJPParser#locales}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLocales(FJPParser.LocalesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#locale}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLocale(FJPParser.LocaleContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FJPParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

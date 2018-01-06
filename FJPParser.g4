@@ -13,7 +13,9 @@ int_var     : INT ID (ASSIGN INT_VALUE)? SEMI;
 boolean_var : BOOLEAN ID (ASSIGN BOOLEAN_VALUE)? SEMI;
 
 argument    : INT ID | BOOLEAN ID;
-body        : START statement* END;
+body        : START locales statement* END;
+locales     : locale*;
+locale      : int_var | boolean_var;
 statement   : call
             | while_cycle
             | assigment;

@@ -97,6 +97,26 @@ public interface FJPParserListener extends ParseTreeListener {
 	 */
 	void exitBody(FJPParser.BodyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FJPParser#locales}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocales(FJPParser.LocalesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#locales}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocales(FJPParser.LocalesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FJPParser#locale}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocale(FJPParser.LocaleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#locale}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocale(FJPParser.LocaleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FJPParser#statement}.
 	 * @param ctx the parse tree
 	 */

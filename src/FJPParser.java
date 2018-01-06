@@ -27,13 +27,13 @@ public class FJPParser extends Parser {
 	public static final int
 		RULE_program = 0, RULE_constant = 1, RULE_globals = 2, RULE_global = 3, 
 		RULE_procedure = 4, RULE_int_var = 5, RULE_boolean_var = 6, RULE_argument = 7, 
-		RULE_body = 8, RULE_statement = 9, RULE_call = 10, RULE_while_cycle = 11, 
-		RULE_assigment = 12, RULE_var = 13, RULE_expression = 14, RULE_simpleExp = 15, 
-		RULE_term = 16, RULE_main = 17;
+		RULE_body = 8, RULE_locales = 9, RULE_locale = 10, RULE_statement = 11, 
+		RULE_call = 12, RULE_while_cycle = 13, RULE_assigment = 14, RULE_var = 15, 
+		RULE_expression = 16, RULE_simpleExp = 17, RULE_term = 18, RULE_main = 19;
 	public static final String[] ruleNames = {
 		"program", "constant", "globals", "global", "procedure", "int_var", "boolean_var", 
-		"argument", "body", "statement", "call", "while_cycle", "assigment", "var", 
-		"expression", "simpleExp", "term", "main"
+		"argument", "body", "locales", "locale", "statement", "call", "while_cycle", 
+		"assigment", "var", "expression", "simpleExp", "term", "main"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -144,41 +144,41 @@ public class FJPParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(36);
-			match(START);
 			setState(40);
+			match(START);
+			setState(44);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==CONST) {
 				{
 				{
-				setState(37);
+				setState(41);
 				constant();
 				}
 				}
-				setState(42);
+				setState(46);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(43);
-			globals();
 			setState(47);
+			globals();
+			setState(51);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==PROCEDURE) {
 				{
 				{
-				setState(44);
+				setState(48);
 				procedure();
 				}
 				}
-				setState(49);
+				setState(53);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(50);
+			setState(54);
 			main();
-			setState(51);
+			setState(55);
 			match(END);
 			}
 		}
@@ -224,15 +224,15 @@ public class FJPParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(53);
-			match(CONST);
-			setState(54);
-			match(ID);
-			setState(55);
-			match(ASSIGN);
-			setState(56);
-			match(INT_VALUE);
 			setState(57);
+			match(CONST);
+			setState(58);
+			match(ID);
+			setState(59);
+			match(ASSIGN);
+			setState(60);
+			match(INT_VALUE);
+			setState(61);
 			match(SEMI);
 			}
 		}
@@ -280,17 +280,17 @@ public class FJPParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(62);
+			setState(66);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==INT || _la==BOOLEAN) {
 				{
 				{
-				setState(59);
+				setState(63);
 				global();
 				}
 				}
-				setState(64);
+				setState(68);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -337,20 +337,20 @@ public class FJPParser extends Parser {
 		GlobalContext _localctx = new GlobalContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_global);
 		try {
-			setState(67);
+			setState(71);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(65);
+				setState(69);
 				int_var();
 				}
 				break;
 			case BOOLEAN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(66);
+				setState(70);
 				boolean_var();
 				}
 				break;
@@ -413,33 +413,33 @@ public class FJPParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(69);
+			setState(73);
 			match(PROCEDURE);
-			setState(70);
+			setState(74);
 			match(ID);
-			setState(71);
+			setState(75);
 			match(LPAREN);
-			setState(72);
+			setState(76);
 			argument();
-			setState(77);
+			setState(81);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(73);
+				setState(77);
 				match(COMMA);
-				setState(74);
+				setState(78);
 				argument();
 				}
 				}
-				setState(79);
+				setState(83);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(80);
+			setState(84);
 			match(RPAREN);
-			setState(81);
+			setState(85);
 			body();
 			}
 		}
@@ -486,23 +486,23 @@ public class FJPParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(83);
-			match(INT);
-			setState(84);
-			match(ID);
 			setState(87);
+			match(INT);
+			setState(88);
+			match(ID);
+			setState(91);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==ASSIGN) {
 				{
-				setState(85);
+				setState(89);
 				match(ASSIGN);
-				setState(86);
+				setState(90);
 				match(INT_VALUE);
 				}
 			}
 
-			setState(89);
+			setState(93);
 			match(SEMI);
 			}
 		}
@@ -549,23 +549,23 @@ public class FJPParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(91);
-			match(BOOLEAN);
-			setState(92);
-			match(ID);
 			setState(95);
+			match(BOOLEAN);
+			setState(96);
+			match(ID);
+			setState(99);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==ASSIGN) {
 				{
-				setState(93);
+				setState(97);
 				match(ASSIGN);
-				setState(94);
+				setState(98);
 				match(BOOLEAN_VALUE);
 				}
 			}
 
-			setState(97);
+			setState(101);
 			match(SEMI);
 			}
 		}
@@ -607,24 +607,24 @@ public class FJPParser extends Parser {
 		ArgumentContext _localctx = new ArgumentContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_argument);
 		try {
-			setState(103);
+			setState(107);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(99);
+				setState(103);
 				match(INT);
-				setState(100);
+				setState(104);
 				match(ID);
 				}
 				break;
 			case BOOLEAN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(101);
+				setState(105);
 				match(BOOLEAN);
-				setState(102);
+				setState(106);
 				match(ID);
 				}
 				break;
@@ -645,6 +645,9 @@ public class FJPParser extends Parser {
 
 	public static class BodyContext extends ParserRuleContext {
 		public TerminalNode START() { return getToken(FJPParser.START, 0); }
+		public LocalesContext locales() {
+			return getRuleContext(LocalesContext.class,0);
+		}
 		public TerminalNode END() { return getToken(FJPParser.END, 0); }
 		public List<StatementContext> statement() {
 			return getRuleContexts(StatementContext.class);
@@ -678,24 +681,148 @@ public class FJPParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(105);
-			match(START);
 			setState(109);
+			match(START);
+			setState(110);
+			locales();
+			setState(114);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CALL) | (1L << WHILE) | (1L << ID))) != 0)) {
 				{
 				{
-				setState(106);
+				setState(111);
 				statement();
 				}
 				}
-				setState(111);
+				setState(116);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(112);
+			setState(117);
 			match(END);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class LocalesContext extends ParserRuleContext {
+		public List<LocaleContext> locale() {
+			return getRuleContexts(LocaleContext.class);
+		}
+		public LocaleContext locale(int i) {
+			return getRuleContext(LocaleContext.class,i);
+		}
+		public LocalesContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_locales; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FJPParserListener) ((FJPParserListener)listener).enterLocales(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FJPParserListener) ((FJPParserListener)listener).exitLocales(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FJPParserVisitor) return ((FJPParserVisitor<? extends T>)visitor).visitLocales(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final LocalesContext locales() throws RecognitionException {
+		LocalesContext _localctx = new LocalesContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_locales);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(122);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==INT || _la==BOOLEAN) {
+				{
+				{
+				setState(119);
+				locale();
+				}
+				}
+				setState(124);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class LocaleContext extends ParserRuleContext {
+		public Int_varContext int_var() {
+			return getRuleContext(Int_varContext.class,0);
+		}
+		public Boolean_varContext boolean_var() {
+			return getRuleContext(Boolean_varContext.class,0);
+		}
+		public LocaleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_locale; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FJPParserListener) ((FJPParserListener)listener).enterLocale(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FJPParserListener) ((FJPParserListener)listener).exitLocale(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FJPParserVisitor) return ((FJPParserVisitor<? extends T>)visitor).visitLocale(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final LocaleContext locale() throws RecognitionException {
+		LocaleContext _localctx = new LocaleContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_locale);
+		try {
+			setState(127);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case INT:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(125);
+				int_var();
+				}
+				break;
+			case BOOLEAN:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(126);
+				boolean_var();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -740,29 +867,29 @@ public class FJPParser extends Parser {
 
 	public final StatementContext statement() throws RecognitionException {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_statement);
+		enterRule(_localctx, 22, RULE_statement);
 		try {
-			setState(117);
+			setState(132);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case CALL:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(114);
+				setState(129);
 				call();
 				}
 				break;
 			case WHILE:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(115);
+				setState(130);
 				while_cycle();
 				}
 				break;
 			case ID:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(116);
+				setState(131);
 				assigment();
 				}
 				break;
@@ -818,38 +945,38 @@ public class FJPParser extends Parser {
 
 	public final CallContext call() throws RecognitionException {
 		CallContext _localctx = new CallContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_call);
+		enterRule(_localctx, 24, RULE_call);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(119);
+			setState(134);
 			match(CALL);
-			setState(120);
+			setState(135);
 			match(ID);
-			setState(121);
+			setState(136);
 			match(LPAREN);
-			setState(122);
+			setState(137);
 			var();
-			setState(127);
+			setState(142);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(123);
+				setState(138);
 				match(COMMA);
-				setState(124);
+				setState(139);
 				var();
 				}
 				}
-				setState(129);
+				setState(144);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(130);
+			setState(145);
 			match(RPAREN);
-			setState(131);
+			setState(146);
 			match(SEMI);
 			}
 		}
@@ -900,36 +1027,36 @@ public class FJPParser extends Parser {
 
 	public final While_cycleContext while_cycle() throws RecognitionException {
 		While_cycleContext _localctx = new While_cycleContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_while_cycle);
+		enterRule(_localctx, 26, RULE_while_cycle);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(133);
+			setState(148);
 			match(WHILE);
-			setState(134);
+			setState(149);
 			match(LPAREN);
-			setState(135);
+			setState(150);
 			expression();
-			setState(136);
+			setState(151);
 			match(RPAREN);
-			setState(137);
+			setState(152);
 			match(START);
-			setState(141);
+			setState(156);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << CALL) | (1L << WHILE) | (1L << ID))) != 0)) {
 				{
 				{
-				setState(138);
+				setState(153);
 				statement();
 				}
 				}
-				setState(143);
+				setState(158);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(144);
+			setState(159);
 			match(END);
 			}
 		}
@@ -975,31 +1102,31 @@ public class FJPParser extends Parser {
 
 	public final AssigmentContext assigment() throws RecognitionException {
 		AssigmentContext _localctx = new AssigmentContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_assigment);
+		enterRule(_localctx, 28, RULE_assigment);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(146);
+			setState(161);
 			match(ID);
-			setState(147);
+			setState(162);
 			match(ASSIGN);
-			setState(150);
+			setState(165);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
 			case 1:
 				{
-				setState(148);
+				setState(163);
 				var();
 				}
 				break;
 			case 2:
 				{
-				setState(149);
+				setState(164);
 				expression();
 				}
 				break;
 			}
-			setState(152);
+			setState(167);
 			match(SEMI);
 			}
 		}
@@ -1039,12 +1166,12 @@ public class FJPParser extends Parser {
 
 	public final VarContext var() throws RecognitionException {
 		VarContext _localctx = new VarContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_var);
+		enterRule(_localctx, 30, RULE_var);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(154);
+			setState(169);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT_VALUE) | (1L << BOOLEAN_VALUE) | (1L << ID))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1119,20 +1246,20 @@ public class FJPParser extends Parser {
 
 	public final ExpressionContext expression() throws RecognitionException {
 		ExpressionContext _localctx = new ExpressionContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_expression);
+		enterRule(_localctx, 32, RULE_expression);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(156);
+			setState(171);
 			simpleExp();
-			setState(161);
+			setState(176);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << GT) | (1L << LT) | (1L << LE) | (1L << GE) | (1L << EQUAL) | (1L << NOT_EQUAL))) != 0)) {
 				{
 				{
-				setState(157);
+				setState(172);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << GT) | (1L << LT) | (1L << LE) | (1L << GE) | (1L << EQUAL) | (1L << NOT_EQUAL))) != 0)) ) {
 				_errHandler.recoverInline(this);
@@ -1142,11 +1269,11 @@ public class FJPParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(158);
+				setState(173);
 				simpleExp();
 				}
 				}
-				setState(163);
+				setState(178);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1199,20 +1326,20 @@ public class FJPParser extends Parser {
 
 	public final SimpleExpContext simpleExp() throws RecognitionException {
 		SimpleExpContext _localctx = new SimpleExpContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_simpleExp);
+		enterRule(_localctx, 34, RULE_simpleExp);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(164);
+			setState(179);
 			term();
-			setState(169);
+			setState(184);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==AND || _la==OR) {
 				{
 				{
-				setState(165);
+				setState(180);
 				_la = _input.LA(1);
 				if ( !(_la==AND || _la==OR) ) {
 				_errHandler.recoverInline(this);
@@ -1222,11 +1349,11 @@ public class FJPParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(166);
+				setState(181);
 				term();
 				}
 				}
-				setState(171);
+				setState(186);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1287,20 +1414,20 @@ public class FJPParser extends Parser {
 
 	public final TermContext term() throws RecognitionException {
 		TermContext _localctx = new TermContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_term);
+		enterRule(_localctx, 36, RULE_term);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(172);
+			setState(187);
 			var();
-			setState(177);
+			setState(192);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ADD) | (1L << SUB) | (1L << MUL) | (1L << DIV))) != 0)) {
 				{
 				{
-				setState(173);
+				setState(188);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ADD) | (1L << SUB) | (1L << MUL) | (1L << DIV))) != 0)) ) {
 				_errHandler.recoverInline(this);
@@ -1310,11 +1437,11 @@ public class FJPParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(174);
+				setState(189);
 				var();
 				}
 				}
-				setState(179);
+				setState(194);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1357,13 +1484,13 @@ public class FJPParser extends Parser {
 
 	public final MainContext main() throws RecognitionException {
 		MainContext _localctx = new MainContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_main);
+		enterRule(_localctx, 38, RULE_main);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(180);
+			setState(195);
 			match(MAIN);
-			setState(181);
+			setState(196);
 			body();
 			}
 		}
@@ -1379,60 +1506,66 @@ public class FJPParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3!\u00ba\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3!\u00c9\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\4\23\t\23\3\2\3\2\7\2)\n\2\f\2\16\2,\13\2\3\2\3\2\7\2\60\n\2\f\2\16\2"+
-		"\63\13\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\4\7\4?\n\4\f\4\16\4B\13"+
-		"\4\3\5\3\5\5\5F\n\5\3\6\3\6\3\6\3\6\3\6\3\6\7\6N\n\6\f\6\16\6Q\13\6\3"+
-		"\6\3\6\3\6\3\7\3\7\3\7\3\7\5\7Z\n\7\3\7\3\7\3\b\3\b\3\b\3\b\5\bb\n\b\3"+
-		"\b\3\b\3\t\3\t\3\t\3\t\5\tj\n\t\3\n\3\n\7\nn\n\n\f\n\16\nq\13\n\3\n\3"+
-		"\n\3\13\3\13\3\13\5\13x\n\13\3\f\3\f\3\f\3\f\3\f\3\f\7\f\u0080\n\f\f\f"+
-		"\16\f\u0083\13\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r\7\r\u008e\n\r\f\r"+
-		"\16\r\u0091\13\r\3\r\3\r\3\16\3\16\3\16\3\16\5\16\u0099\n\16\3\16\3\16"+
-		"\3\17\3\17\3\20\3\20\3\20\7\20\u00a2\n\20\f\20\16\20\u00a5\13\20\3\21"+
-		"\3\21\3\21\7\21\u00aa\n\21\f\21\16\21\u00ad\13\21\3\22\3\22\3\22\7\22"+
-		"\u00b2\n\22\f\22\16\22\u00b5\13\22\3\23\3\23\3\23\3\23\2\2\24\2\4\6\b"+
-		"\n\f\16\20\22\24\26\30\32\34\36 \"$\2\6\3\2\20\22\3\2\24\31\3\2\33\34"+
-		"\3\2\35 \2\u00b8\2&\3\2\2\2\4\67\3\2\2\2\6@\3\2\2\2\bE\3\2\2\2\nG\3\2"+
-		"\2\2\fU\3\2\2\2\16]\3\2\2\2\20i\3\2\2\2\22k\3\2\2\2\24w\3\2\2\2\26y\3"+
-		"\2\2\2\30\u0087\3\2\2\2\32\u0094\3\2\2\2\34\u009c\3\2\2\2\36\u009e\3\2"+
-		"\2\2 \u00a6\3\2\2\2\"\u00ae\3\2\2\2$\u00b6\3\2\2\2&*\7\7\2\2\')\5\4\3"+
-		"\2(\'\3\2\2\2),\3\2\2\2*(\3\2\2\2*+\3\2\2\2+-\3\2\2\2,*\3\2\2\2-\61\5"+
-		"\6\4\2.\60\5\n\6\2/.\3\2\2\2\60\63\3\2\2\2\61/\3\2\2\2\61\62\3\2\2\2\62"+
-		"\64\3\2\2\2\63\61\3\2\2\2\64\65\5$\23\2\65\66\7\b\2\2\66\3\3\2\2\2\67"+
-		"8\7\3\2\289\7\22\2\29:\7\23\2\2:;\7\20\2\2;<\7\16\2\2<\5\3\2\2\2=?\5\b"+
-		"\5\2>=\3\2\2\2?B\3\2\2\2@>\3\2\2\2@A\3\2\2\2A\7\3\2\2\2B@\3\2\2\2CF\5"+
-		"\f\7\2DF\5\16\b\2EC\3\2\2\2ED\3\2\2\2F\t\3\2\2\2GH\7\6\2\2HI\7\22\2\2"+
-		"IJ\7\f\2\2JO\5\20\t\2KL\7\17\2\2LN\5\20\t\2MK\3\2\2\2NQ\3\2\2\2OM\3\2"+
-		"\2\2OP\3\2\2\2PR\3\2\2\2QO\3\2\2\2RS\7\r\2\2ST\5\22\n\2T\13\3\2\2\2UV"+
-		"\7\4\2\2VY\7\22\2\2WX\7\23\2\2XZ\7\20\2\2YW\3\2\2\2YZ\3\2\2\2Z[\3\2\2"+
-		"\2[\\\7\16\2\2\\\r\3\2\2\2]^\7\5\2\2^a\7\22\2\2_`\7\23\2\2`b\7\21\2\2"+
-		"a_\3\2\2\2ab\3\2\2\2bc\3\2\2\2cd\7\16\2\2d\17\3\2\2\2ef\7\4\2\2fj\7\22"+
-		"\2\2gh\7\5\2\2hj\7\22\2\2ie\3\2\2\2ig\3\2\2\2j\21\3\2\2\2ko\7\7\2\2ln"+
-		"\5\24\13\2ml\3\2\2\2nq\3\2\2\2om\3\2\2\2op\3\2\2\2pr\3\2\2\2qo\3\2\2\2"+
-		"rs\7\b\2\2s\23\3\2\2\2tx\5\26\f\2ux\5\30\r\2vx\5\32\16\2wt\3\2\2\2wu\3"+
-		"\2\2\2wv\3\2\2\2x\25\3\2\2\2yz\7\t\2\2z{\7\22\2\2{|\7\f\2\2|\u0081\5\34"+
-		"\17\2}~\7\17\2\2~\u0080\5\34\17\2\177}\3\2\2\2\u0080\u0083\3\2\2\2\u0081"+
-		"\177\3\2\2\2\u0081\u0082\3\2\2\2\u0082\u0084\3\2\2\2\u0083\u0081\3\2\2"+
-		"\2\u0084\u0085\7\r\2\2\u0085\u0086\7\16\2\2\u0086\27\3\2\2\2\u0087\u0088"+
-		"\7\13\2\2\u0088\u0089\7\f\2\2\u0089\u008a\5\36\20\2\u008a\u008b\7\r\2"+
-		"\2\u008b\u008f\7\7\2\2\u008c\u008e\5\24\13\2\u008d\u008c\3\2\2\2\u008e"+
-		"\u0091\3\2\2\2\u008f\u008d\3\2\2\2\u008f\u0090\3\2\2\2\u0090\u0092\3\2"+
-		"\2\2\u0091\u008f\3\2\2\2\u0092\u0093\7\b\2\2\u0093\31\3\2\2\2\u0094\u0095"+
-		"\7\22\2\2\u0095\u0098\7\23\2\2\u0096\u0099\5\34\17\2\u0097\u0099\5\36"+
-		"\20\2\u0098\u0096\3\2\2\2\u0098\u0097\3\2\2\2\u0099\u009a\3\2\2\2\u009a"+
-		"\u009b\7\16\2\2\u009b\33\3\2\2\2\u009c\u009d\t\2\2\2\u009d\35\3\2\2\2"+
-		"\u009e\u00a3\5 \21\2\u009f\u00a0\t\3\2\2\u00a0\u00a2\5 \21\2\u00a1\u009f"+
-		"\3\2\2\2\u00a2\u00a5\3\2\2\2\u00a3\u00a1\3\2\2\2\u00a3\u00a4\3\2\2\2\u00a4"+
-		"\37\3\2\2\2\u00a5\u00a3\3\2\2\2\u00a6\u00ab\5\"\22\2\u00a7\u00a8\t\4\2"+
-		"\2\u00a8\u00aa\5\"\22\2\u00a9\u00a7\3\2\2\2\u00aa\u00ad\3\2\2\2\u00ab"+
-		"\u00a9\3\2\2\2\u00ab\u00ac\3\2\2\2\u00ac!\3\2\2\2\u00ad\u00ab\3\2\2\2"+
-		"\u00ae\u00b3\5\34\17\2\u00af\u00b0\t\5\2\2\u00b0\u00b2\5\34\17\2\u00b1"+
-		"\u00af\3\2\2\2\u00b2\u00b5\3\2\2\2\u00b3\u00b1\3\2\2\2\u00b3\u00b4\3\2"+
-		"\2\2\u00b4#\3\2\2\2\u00b5\u00b3\3\2\2\2\u00b6\u00b7\7\n\2\2\u00b7\u00b8"+
-		"\5\22\n\2\u00b8%\3\2\2\2\22*\61@EOYaiow\u0081\u008f\u0098\u00a3\u00ab"+
-		"\u00b3";
+		"\4\23\t\23\4\24\t\24\4\25\t\25\3\2\3\2\7\2-\n\2\f\2\16\2\60\13\2\3\2\3"+
+		"\2\7\2\64\n\2\f\2\16\2\67\13\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\4"+
+		"\7\4C\n\4\f\4\16\4F\13\4\3\5\3\5\5\5J\n\5\3\6\3\6\3\6\3\6\3\6\3\6\7\6"+
+		"R\n\6\f\6\16\6U\13\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\5\7^\n\7\3\7\3\7\3\b"+
+		"\3\b\3\b\3\b\5\bf\n\b\3\b\3\b\3\t\3\t\3\t\3\t\5\tn\n\t\3\n\3\n\3\n\7\n"+
+		"s\n\n\f\n\16\nv\13\n\3\n\3\n\3\13\7\13{\n\13\f\13\16\13~\13\13\3\f\3\f"+
+		"\5\f\u0082\n\f\3\r\3\r\3\r\5\r\u0087\n\r\3\16\3\16\3\16\3\16\3\16\3\16"+
+		"\7\16\u008f\n\16\f\16\16\16\u0092\13\16\3\16\3\16\3\16\3\17\3\17\3\17"+
+		"\3\17\3\17\3\17\7\17\u009d\n\17\f\17\16\17\u00a0\13\17\3\17\3\17\3\20"+
+		"\3\20\3\20\3\20\5\20\u00a8\n\20\3\20\3\20\3\21\3\21\3\22\3\22\3\22\7\22"+
+		"\u00b1\n\22\f\22\16\22\u00b4\13\22\3\23\3\23\3\23\7\23\u00b9\n\23\f\23"+
+		"\16\23\u00bc\13\23\3\24\3\24\3\24\7\24\u00c1\n\24\f\24\16\24\u00c4\13"+
+		"\24\3\25\3\25\3\25\3\25\2\2\26\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36"+
+		" \"$&(\2\6\3\2\20\22\3\2\24\31\3\2\33\34\3\2\35 \2\u00c7\2*\3\2\2\2\4"+
+		";\3\2\2\2\6D\3\2\2\2\bI\3\2\2\2\nK\3\2\2\2\fY\3\2\2\2\16a\3\2\2\2\20m"+
+		"\3\2\2\2\22o\3\2\2\2\24|\3\2\2\2\26\u0081\3\2\2\2\30\u0086\3\2\2\2\32"+
+		"\u0088\3\2\2\2\34\u0096\3\2\2\2\36\u00a3\3\2\2\2 \u00ab\3\2\2\2\"\u00ad"+
+		"\3\2\2\2$\u00b5\3\2\2\2&\u00bd\3\2\2\2(\u00c5\3\2\2\2*.\7\7\2\2+-\5\4"+
+		"\3\2,+\3\2\2\2-\60\3\2\2\2.,\3\2\2\2./\3\2\2\2/\61\3\2\2\2\60.\3\2\2\2"+
+		"\61\65\5\6\4\2\62\64\5\n\6\2\63\62\3\2\2\2\64\67\3\2\2\2\65\63\3\2\2\2"+
+		"\65\66\3\2\2\2\668\3\2\2\2\67\65\3\2\2\289\5(\25\29:\7\b\2\2:\3\3\2\2"+
+		"\2;<\7\3\2\2<=\7\22\2\2=>\7\23\2\2>?\7\20\2\2?@\7\16\2\2@\5\3\2\2\2AC"+
+		"\5\b\5\2BA\3\2\2\2CF\3\2\2\2DB\3\2\2\2DE\3\2\2\2E\7\3\2\2\2FD\3\2\2\2"+
+		"GJ\5\f\7\2HJ\5\16\b\2IG\3\2\2\2IH\3\2\2\2J\t\3\2\2\2KL\7\6\2\2LM\7\22"+
+		"\2\2MN\7\f\2\2NS\5\20\t\2OP\7\17\2\2PR\5\20\t\2QO\3\2\2\2RU\3\2\2\2SQ"+
+		"\3\2\2\2ST\3\2\2\2TV\3\2\2\2US\3\2\2\2VW\7\r\2\2WX\5\22\n\2X\13\3\2\2"+
+		"\2YZ\7\4\2\2Z]\7\22\2\2[\\\7\23\2\2\\^\7\20\2\2][\3\2\2\2]^\3\2\2\2^_"+
+		"\3\2\2\2_`\7\16\2\2`\r\3\2\2\2ab\7\5\2\2be\7\22\2\2cd\7\23\2\2df\7\21"+
+		"\2\2ec\3\2\2\2ef\3\2\2\2fg\3\2\2\2gh\7\16\2\2h\17\3\2\2\2ij\7\4\2\2jn"+
+		"\7\22\2\2kl\7\5\2\2ln\7\22\2\2mi\3\2\2\2mk\3\2\2\2n\21\3\2\2\2op\7\7\2"+
+		"\2pt\5\24\13\2qs\5\30\r\2rq\3\2\2\2sv\3\2\2\2tr\3\2\2\2tu\3\2\2\2uw\3"+
+		"\2\2\2vt\3\2\2\2wx\7\b\2\2x\23\3\2\2\2y{\5\26\f\2zy\3\2\2\2{~\3\2\2\2"+
+		"|z\3\2\2\2|}\3\2\2\2}\25\3\2\2\2~|\3\2\2\2\177\u0082\5\f\7\2\u0080\u0082"+
+		"\5\16\b\2\u0081\177\3\2\2\2\u0081\u0080\3\2\2\2\u0082\27\3\2\2\2\u0083"+
+		"\u0087\5\32\16\2\u0084\u0087\5\34\17\2\u0085\u0087\5\36\20\2\u0086\u0083"+
+		"\3\2\2\2\u0086\u0084\3\2\2\2\u0086\u0085\3\2\2\2\u0087\31\3\2\2\2\u0088"+
+		"\u0089\7\t\2\2\u0089\u008a\7\22\2\2\u008a\u008b\7\f\2\2\u008b\u0090\5"+
+		" \21\2\u008c\u008d\7\17\2\2\u008d\u008f\5 \21\2\u008e\u008c\3\2\2\2\u008f"+
+		"\u0092\3\2\2\2\u0090\u008e\3\2\2\2\u0090\u0091\3\2\2\2\u0091\u0093\3\2"+
+		"\2\2\u0092\u0090\3\2\2\2\u0093\u0094\7\r\2\2\u0094\u0095\7\16\2\2\u0095"+
+		"\33\3\2\2\2\u0096\u0097\7\13\2\2\u0097\u0098\7\f\2\2\u0098\u0099\5\"\22"+
+		"\2\u0099\u009a\7\r\2\2\u009a\u009e\7\7\2\2\u009b\u009d\5\30\r\2\u009c"+
+		"\u009b\3\2\2\2\u009d\u00a0\3\2\2\2\u009e\u009c\3\2\2\2\u009e\u009f\3\2"+
+		"\2\2\u009f\u00a1\3\2\2\2\u00a0\u009e\3\2\2\2\u00a1\u00a2\7\b\2\2\u00a2"+
+		"\35\3\2\2\2\u00a3\u00a4\7\22\2\2\u00a4\u00a7\7\23\2\2\u00a5\u00a8\5 \21"+
+		"\2\u00a6\u00a8\5\"\22\2\u00a7\u00a5\3\2\2\2\u00a7\u00a6\3\2\2\2\u00a8"+
+		"\u00a9\3\2\2\2\u00a9\u00aa\7\16\2\2\u00aa\37\3\2\2\2\u00ab\u00ac\t\2\2"+
+		"\2\u00ac!\3\2\2\2\u00ad\u00b2\5$\23\2\u00ae\u00af\t\3\2\2\u00af\u00b1"+
+		"\5$\23\2\u00b0\u00ae\3\2\2\2\u00b1\u00b4\3\2\2\2\u00b2\u00b0\3\2\2\2\u00b2"+
+		"\u00b3\3\2\2\2\u00b3#\3\2\2\2\u00b4\u00b2\3\2\2\2\u00b5\u00ba\5&\24\2"+
+		"\u00b6\u00b7\t\4\2\2\u00b7\u00b9\5&\24\2\u00b8\u00b6\3\2\2\2\u00b9\u00bc"+
+		"\3\2\2\2\u00ba\u00b8\3\2\2\2\u00ba\u00bb\3\2\2\2\u00bb%\3\2\2\2\u00bc"+
+		"\u00ba\3\2\2\2\u00bd\u00c2\5 \21\2\u00be\u00bf\t\5\2\2\u00bf\u00c1\5 "+
+		"\21\2\u00c0\u00be\3\2\2\2\u00c1\u00c4\3\2\2\2\u00c2\u00c0\3\2\2\2\u00c2"+
+		"\u00c3\3\2\2\2\u00c3\'\3\2\2\2\u00c4\u00c2\3\2\2\2\u00c5\u00c6\7\n\2\2"+
+		"\u00c6\u00c7\5\22\n\2\u00c7)\3\2\2\2\24.\65DIS]emt|\u0081\u0086\u0090"+
+		"\u009e\u00a7\u00b2\u00ba\u00c2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -35,6 +35,6 @@ public class PL0InstructionsFactory {
     }
 
     public static String getRet(){
-        return "INT 0,0";
+        return "RET 0,0";
     }
 }
