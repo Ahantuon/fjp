@@ -1,6 +1,9 @@
 start
     const KONSTANTA := 5;
     int x := 2;
+    int y;
+    boolean xx := true;
+    boolean yy;
 
     procedure delej (int a)
     start

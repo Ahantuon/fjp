@@ -8,11 +8,11 @@ constant    : CONST ID ASSIGN INT_VALUE SEMI;
 global      : int_var | boolean_var;
 procedure   : PROCEDURE ID LPAREN argument (COMMA argument)* RPAREN body;
 
-int_var     : INT ID ASSIGN INT_VALUE SEMI;
-boolean_var : BOOLEAN ID ASSIGN BOOLEAN_VALUE SEMI;
+int_var     : INT ID (ASSIGN INT_VALUE)? SEMI;
+boolean_var : BOOLEAN ID (ASSIGN BOOLEAN_VALUE)? SEMI;
 
 argument    : INT ID | BOOLEAN ID;
-body   : START statement* END;
+body        : START statement* END;
 statement   : call
             | while_cycle
             | assigment;
