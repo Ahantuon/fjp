@@ -28,12 +28,6 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGlobals(FJPParser.GlobalsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link FJPParser#global}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGlobal(FJPParser.GlobalContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link FJPParser#procedure}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -70,11 +64,11 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLocales(FJPParser.LocalesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link FJPParser#locale}.
+	 * Visit a parse tree produced by {@link FJPParser#variable}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLocale(FJPParser.LocaleContext ctx);
+	T visitVariable(FJPParser.VariableContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FJPParser#statement}.
 	 * @param ctx the parse tree

@@ -37,16 +37,6 @@ public interface FJPParserListener extends ParseTreeListener {
 	 */
 	void exitGlobals(FJPParser.GlobalsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FJPParser#global}.
-	 * @param ctx the parse tree
-	 */
-	void enterGlobal(FJPParser.GlobalContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FJPParser#global}.
-	 * @param ctx the parse tree
-	 */
-	void exitGlobal(FJPParser.GlobalContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link FJPParser#procedure}.
 	 * @param ctx the parse tree
 	 */
@@ -107,15 +97,15 @@ public interface FJPParserListener extends ParseTreeListener {
 	 */
 	void exitLocales(FJPParser.LocalesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FJPParser#locale}.
+	 * Enter a parse tree produced by {@link FJPParser#variable}.
 	 * @param ctx the parse tree
 	 */
-	void enterLocale(FJPParser.LocaleContext ctx);
+	void enterVariable(FJPParser.VariableContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link FJPParser#locale}.
+	 * Exit a parse tree produced by {@link FJPParser#variable}.
 	 * @param ctx the parse tree
 	 */
-	void exitLocale(FJPParser.LocaleContext ctx);
+	void exitVariable(FJPParser.VariableContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FJPParser#statement}.
 	 * @param ctx the parse tree

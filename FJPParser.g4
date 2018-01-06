@@ -5,8 +5,7 @@ options { tokenVocab=FJPLexer; }
 program     : START constant* globals procedure* main END;
 
 constant    : CONST ID ASSIGN INT_VALUE SEMI;
-globals     : global*;
-global      : int_var | boolean_var;
+globals     : variable*;
 procedure   : PROCEDURE ID LPAREN argument (COMMA argument)* RPAREN body;
 
 int_var     : INT ID (ASSIGN INT_VALUE)? SEMI;
@@ -14,8 +13,8 @@ boolean_var : BOOLEAN ID (ASSIGN BOOLEAN_VALUE)? SEMI;
 
 argument    : INT ID | BOOLEAN ID;
 body        : START locales statement* END;
-locales     : locale*;
-locale      : int_var | boolean_var;
+locales     : variable*;
+variable    : int_var | boolean_var;
 statement   : call
             | while_cycle
             | assigment;

@@ -51,18 +51,6 @@ public class FJPParserBaseListener implements FJPParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGlobal(FJPParser.GlobalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGlobal(FJPParser.GlobalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterProcedure(FJPParser.ProcedureContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -135,13 +123,13 @@ public class FJPParserBaseListener implements FJPParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLocale(FJPParser.LocaleContext ctx) { }
+	@Override public void enterVariable(FJPParser.VariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLocale(FJPParser.LocaleContext ctx) { }
+	@Override public void exitVariable(FJPParser.VariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
