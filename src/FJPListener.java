@@ -61,8 +61,12 @@ public class FJPListener extends FJPParserBaseListener{
     @Override
     public void enterProcedure(FJPParser.ProcedureContext ctx) {
         procedureEnter = instructions.size();
-        localVariables.clear();
-        level = 1;
+    }
+
+    @Override
+    public void exitProcedure(FJPParser.ProcedureContext ctx) {
+        procedures.put(ctx.ID().getText(), new Procedure(procedureEnter, STACK_SIZE + ctx.body().locales().variable().size()));
+
     }
 
     @Override
@@ -93,23 +97,14 @@ public class FJPListener extends FJPParserBaseListener{
         }
     }
 
-    private String parseVariableContext(FJPParser.VariableContext ctx, int address) {
-        int value;
-        String name;
-        if(ctx.int_var() != null){
-            name = ctx.int_var().ID().getText();
-            value = parseIntValue(ctx.int_var().INT_VALUE());
-        }else{
-            name = ctx.boolean_var().ID().getText();
-            value = parseBooleanValue(ctx.boolean_var().BOOLEAN_VALUE());
-        }
-        addVariable(address, value);
-        return name;
+    @Override
+    public void enterBody(FJPParser.BodyContext ctx) {
+        localVariables.clear();
+        level = 1;
     }
 
     @Override
-    public void exitProcedure(FJPParser.ProcedureContext ctx) {
-        procedures.put(ctx.ID().getText(), new Procedure(procedureEnter, STACK_SIZE + ctx.body().locales().variable().size()));
+    public void exitBody(FJPParser.BodyContext ctx) {
         instructions.add(PL0InstructionsFactory.getRet());
         level = 0;
     }
@@ -123,6 +118,20 @@ public class FJPListener extends FJPParserBaseListener{
         for (int i = 0; i < instructions.size(); i++) {
             System.out.println(i + "\t" + instructions.get(i));
         }
+    }
+
+    private String parseVariableContext(FJPParser.VariableContext ctx, int address) {
+        int value;
+        String name;
+        if(ctx.int_var() != null){
+            name = ctx.int_var().ID().getText();
+            value = parseIntValue(ctx.int_var().INT_VALUE());
+        }else{
+            name = ctx.boolean_var().ID().getText();
+            value = parseBooleanValue(ctx.boolean_var().BOOLEAN_VALUE());
+        }
+        addVariable(address, value);
+        return name;
     }
 
     private int parseIntValue(TerminalNode terminalNode) {
