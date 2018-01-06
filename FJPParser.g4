@@ -2,9 +2,10 @@ parser grammar FJPParser;
 
 options { tokenVocab=FJPLexer; }
 
-program     : START constant* global* procedure* main END;
+program     : START constant* globals procedure* main END;
 
 constant    : CONST ID ASSIGN INT_VALUE SEMI;
+globals     : global*;
 global      : int_var | boolean_var;
 procedure   : PROCEDURE ID LPAREN argument (COMMA argument)* RPAREN body;
 

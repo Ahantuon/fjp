@@ -22,6 +22,12 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitConstant(FJPParser.ConstantContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FJPParser#globals}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGlobals(FJPParser.GlobalsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FJPParser#global}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

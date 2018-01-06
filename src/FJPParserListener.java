@@ -27,6 +27,16 @@ public interface FJPParserListener extends ParseTreeListener {
 	 */
 	void exitConstant(FJPParser.ConstantContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FJPParser#globals}.
+	 * @param ctx the parse tree
+	 */
+	void enterGlobals(FJPParser.GlobalsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#globals}.
+	 * @param ctx the parse tree
+	 */
+	void exitGlobals(FJPParser.GlobalsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FJPParser#global}.
 	 * @param ctx the parse tree
 	 */
