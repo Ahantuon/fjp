@@ -12,6 +12,7 @@ import java.util.Map;
 
 public class FJPListener extends FJPParserBaseListener{
     private static final int STACK_SIZE = 3;
+    private static final int VARIABLE_INSTRUCTION_COUNT = 2;
     private static final int DEFAULT_VALUE = 0;
     private static final int TRUE_VALUE = 1;
     private Map<String, Integer> constants;
@@ -33,13 +34,15 @@ public class FJPListener extends FJPParserBaseListener{
 
     @Override
     public void enterProgram(FJPParser.ProgramContext ctx){
-        instructions.add(PL0InstructionsFactory.getJmp(1));
+        instructions.add(PL0InstructionsFactory.getJmp(base));
     }
 
     @Override
     public void exitGlobals(FJPParser.GlobalsContext ctx){
-        int count = ctx.getChildCount();
-        instructions.add(instructions.size() - (2 * count), PL0InstructionsFactory.getInt(STACK_SIZE + count));
+        int variablesCount = ctx.getChildCount();
+        int totalSize = STACK_SIZE + variablesCount;
+        instructions.add(instructions.size() - (VARIABLE_INSTRUCTION_COUNT * variablesCount), PL0InstructionsFactory.getInt(totalSize));
+        top = totalSize;
     }
 
     @Override
