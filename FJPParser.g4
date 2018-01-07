@@ -25,7 +25,7 @@ call        : CALL ID LPAREN var (COMMA var)* RPAREN SEMI;
 do_while    : DO START (call | assigment)* END WHILE LPAREN expression RPAREN;
 if_else     : IF LPAREN expression RPAREN START (call | assigment | do_while)* END else_part START (call | assigment | do_while)* END;
 else_part   : ELSE;
-assigment   : ID ASSIGN (var | expression) SEMI;
+assigment   : ID (COMMA ID)* ASSIGN (var | expression) SEMI;
 
 var         : NEG? LPAREN expression RPAREN | value | ids;
 value       : INT_VALUE | BOOLEAN_VALUE;

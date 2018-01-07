@@ -94,7 +94,7 @@ public class FJPListener extends FJPParserBaseListener{
         int argumentsCount = 0;
         for (int i = 0; i < ctx.getChildCount(); i++) {
             if(ctx.getChild(i) instanceof FJPParser.ArgumentContext){
-                localVariables.put(ctx.getChild(i).getChild(1).getText(), top + argumentsCount);
+                localVariables.put(ctx.getChild(i).getChild(1).getText(), STACK_SIZE + argumentsCount);
                 argumentsCount++;
             }
         }
@@ -295,14 +295,23 @@ public class FJPListener extends FJPParserBaseListener{
 
     @Override
     public void exitAssigment(FJPParser.AssigmentContext ctx) {
-        String id = ctx.ID().getText();
-        if(localVariables.containsKey(id)){
-            instructions.add(PL0InstructionsFactory.getSto(0, localVariables.get(id)));
-        }else if(variables.containsKey(id)){
-            instructions.add(PL0InstructionsFactory.getSto(level, variables.get(id) + base)); //global variable
-        }else{
-            System.out.println("Neexitujici identifikator: " + id + " : " + ctx.getStart());
-            System.exit(1);
+        List<TerminalNode> ids = ctx.ID();
+        for (int i = 0; i < ids.size(); i++) {
+            String id = ids.get(i).getText();
+            if(localVariables.containsKey(id)){
+                instructions.add(PL0InstructionsFactory.getSto(0, localVariables.get(id)));
+                if(i != ids.size() - 1){
+                    instructions.add(PL0InstructionsFactory.getLod(0, localVariables.get(id)));
+                }
+            }else if(variables.containsKey(id)){
+                instructions.add(PL0InstructionsFactory.getSto(level, variables.get(id) + base)); //global variable
+                if(i != ids.size() - 1){
+                    instructions.add(PL0InstructionsFactory.getLod(0, localVariables.get(id)));
+                }
+            }else{
+                System.out.println("Neexitujici identifikator: " + id + " : " + ctx.getStart());
+                System.exit(1);
+            }
         }
         top--;
     }

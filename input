@@ -11,7 +11,7 @@ start
         do
         start
             x := x * ((2 + a) * 3);
-            a := a + 1;
+            a, b := a + 1;
         end while (!(a < KONSTANTA))
     end
 
