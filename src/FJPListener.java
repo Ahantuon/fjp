@@ -31,6 +31,7 @@ public class FJPListener extends FJPParserBaseListener{
     private int level;
     private List<String> instructions;
     private int procedureEnter = 0;
+    private int procedureReturn = -1;
     private List<Integer> arguments;
     private int cycleJump = 0;
     private int cycleEndJump = 0;
@@ -78,14 +79,29 @@ public class FJPListener extends FJPParserBaseListener{
 
     @Override
     public void enterProcedure(FJPParser.ProcedureContext ctx) {
+        procedureReturn = -1;
         procedureEnter = instructions.size();
         localVariables.clear();
     }
 
     @Override
+    public void exitReturn_val(FJPParser.Return_valContext ctx) {
+        if(ctx.ID() != null && localVariables.containsKey(ctx.ID().getText())){
+            int value = localVariables.get(ctx.ID().getText());
+            instructions.add(PL0InstructionsFactory.getLod(0, value));
+            procedureReturn = instructions.size();
+            instructions.add(PL0InstructionsFactory.getSto(0, -1));
+        }
+    }
+
+    @Override
     public void exitProcedure(FJPParser.ProcedureContext ctx) {
         instructions.add(PL0InstructionsFactory.getRet());
-        procedures.put(ctx.ID().getText(), new Procedure(procedureEnter, STACK_SIZE + ctx.body().locales().variable().size(), arguments));
+        Procedure procedure = new Procedure(procedureEnter, STACK_SIZE + ctx.body().locales().variable().size(), arguments);
+        if(procedureReturn != -1){
+            procedure.setReturnAddress(procedureReturn);
+        }
+        procedures.put(ctx.ID().getText(), procedure);
         arguments.clear();
     }
 
@@ -379,7 +395,7 @@ public class FJPListener extends FJPParserBaseListener{
 
     @Override
     public void exitWhile_do(FJPParser.While_doContext ctx) {
-        instructions.add(PL0InstructionsFactory.getJmc(cycleJump));
+        instructions.add(PL0InstructionsFactory.getJmp(cycleJump));
         instructions.set(cycleEndJump, PL0InstructionsFactory.getJmc(instructions.size()));
     }
 
@@ -418,6 +434,25 @@ public class FJPListener extends FJPParserBaseListener{
         }else{
             System.out.println("Neexitujici procedura: " + id + " : " + ctx.getStart());
             System.exit(1);
+        }
+    }
+
+    @Override
+    public void exitReturn_id(FJPParser.Return_idContext ctx) {
+        if(ctx != null){
+            Procedure procedure = procedures.get(((FJPParser.CallContext)ctx.getParent()).ID().getText());
+            int address = procedure.getReturnAddress();
+            if(address != -1){
+                String id = ctx.ID().getText();
+                if(localVariables.containsKey(id)){
+                    instructions.set(address, PL0InstructionsFactory.getSto(level, base + localVariables.get(id)));
+                }else if(variables.containsKey(id)){
+                    instructions.set(address, PL0InstructionsFactory.getSto(level, base + variables.get(id)));
+                }else{
+                    System.out.println("Neexistujici promenna pro zapsani navratove hodnoty: " + id + " : " + ctx.getStart());
+                    System.exit(1);
+                }
+            }
         }
     }
 

@@ -47,6 +47,16 @@ public interface FJPParserListener extends ParseTreeListener {
 	 */
 	void exitProcedure(FJPParser.ProcedureContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FJPParser#return_val}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturn_val(FJPParser.Return_valContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#return_val}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturn_val(FJPParser.Return_valContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FJPParser#int_var}.
 	 * @param ctx the parse tree
 	 */
@@ -136,6 +146,16 @@ public interface FJPParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCall(FJPParser.CallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FJPParser#return_id}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturn_id(FJPParser.Return_idContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#return_id}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturn_id(FJPParser.Return_idContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FJPParser#re_until}.
 	 * @param ctx the parse tree

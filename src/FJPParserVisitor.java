@@ -34,6 +34,12 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProcedure(FJPParser.ProcedureContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FJPParser#return_val}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn_val(FJPParser.Return_valContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FJPParser#int_var}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -87,6 +93,12 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCall(FJPParser.CallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#return_id}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn_id(FJPParser.Return_idContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FJPParser#re_until}.
 	 * @param ctx the parse tree

@@ -15,7 +15,7 @@ IF:             'if';
 ELSE:           'else';
 REPEAT:         'repeat';
 UNTIL:          'until';
-
+RETURN:         'return';
 
 // separatory
 LPAREN:         '(';

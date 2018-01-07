@@ -63,6 +63,18 @@ public class FJPParserBaseListener implements FJPParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterReturn_val(FJPParser.Return_valContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReturn_val(FJPParser.Return_valContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInt_var(FJPParser.Int_varContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -166,6 +178,18 @@ public class FJPParserBaseListener implements FJPParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCall(FJPParser.CallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReturn_id(FJPParser.Return_idContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReturn_id(FJPParser.Return_idContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
