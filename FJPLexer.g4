@@ -13,11 +13,15 @@ WHILE:          'while';
 DO:             'do';
 IF:             'if';
 ELSE:           'else';
-
+REPEAT:         'repeat';
+UNTIL:          'until';
+RETURN:         'return';
 
 // separatory
 LPAREN:         '(';
 RPAREN:         ')';
+LBRACK:         '[';
+RBRACK:         ']';
 SEMI:           ';';
 COMMA:          ',';
 

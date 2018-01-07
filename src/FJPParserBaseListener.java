@@ -63,6 +63,18 @@ public class FJPParserBaseListener implements FJPParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterReturn_val(FJPParser.Return_valContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReturn_val(FJPParser.Return_valContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInt_var(FJPParser.Int_varContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -171,6 +183,30 @@ public class FJPParserBaseListener implements FJPParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterReturn_id(FJPParser.Return_idContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReturn_id(FJPParser.Return_idContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRe_until(FJPParser.Re_untilContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRe_until(FJPParser.Re_untilContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDo_while(FJPParser.Do_whileContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -178,6 +214,30 @@ public class FJPParserBaseListener implements FJPParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDo_while(FJPParser.Do_whileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWhile_do(FJPParser.While_doContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhile_do(FJPParser.While_doContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStart_do(FJPParser.Start_doContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStart_do(FJPParser.Start_doContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -214,6 +274,18 @@ public class FJPParserBaseListener implements FJPParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAssigment(FJPParser.AssigmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssigment_p(FJPParser.Assigment_pContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssigment_p(FJPParser.Assigment_pContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

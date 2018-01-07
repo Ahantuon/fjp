@@ -34,6 +34,12 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProcedure(FJPParser.ProcedureContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FJPParser#return_val}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn_val(FJPParser.Return_valContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FJPParser#int_var}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -88,11 +94,35 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCall(FJPParser.CallContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FJPParser#return_id}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn_id(FJPParser.Return_idContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#re_until}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRe_until(FJPParser.Re_untilContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FJPParser#do_while}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDo_while(FJPParser.Do_whileContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#while_do}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhile_do(FJPParser.While_doContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#start_do}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStart_do(FJPParser.Start_doContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FJPParser#if_else}.
 	 * @param ctx the parse tree
@@ -111,6 +141,12 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssigment(FJPParser.AssigmentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#assigment_p}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssigment_p(FJPParser.Assigment_pContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FJPParser#var}.
 	 * @param ctx the parse tree
