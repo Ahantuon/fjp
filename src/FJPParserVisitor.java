@@ -112,6 +112,12 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssigment(FJPParser.AssigmentContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FJPParser#assigment_p}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssigment_p(FJPParser.Assigment_pContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FJPParser#var}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -317,6 +317,30 @@ public class FJPListener extends FJPParserBaseListener{
     }
 
     @Override
+    public void exitAssigment_p(FJPParser.Assigment_pContext ctx) {
+        List<TerminalNode> ids = ctx.ID();
+        List<FJPParser.VarContext> vars = ctx.var();
+        if(ids.size() == vars.size()){
+            for (int i = ids.size() - 1; i > -1; i--) {
+                String id = ids.get(i).getText();
+                if(localVariables.containsKey(id)){
+                    instructions.add(PL0InstructionsFactory.getSto(0, localVariables.get(id)));
+                }else if(variables.containsKey(id)){
+                    instructions.add(PL0InstructionsFactory.getSto(level, variables.get(id) + base)); //global variable
+                }else{
+                    System.out.println("Neexitujici identifikator: " + id + " : " + ctx.getStart());
+                    System.exit(1);
+                }
+            }
+        }else{
+            System.out.println("Spatny pocet v prirazeni: " + ctx.getStart());
+            System.exit(1);
+        }
+
+        top -= vars.size();
+    }
+
+    @Override
     public void enterDo_while(FJPParser.Do_whileContext ctx) {
         cycleJump = instructions.size();
     }

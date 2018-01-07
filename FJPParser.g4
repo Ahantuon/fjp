@@ -18,14 +18,16 @@ locales     : variable*;
 variable    : int_var | boolean_var;
 statement   : call
             | assigment
+            | assigment_p
             | do_while
             | if_else;
 
 call        : CALL ID LPAREN var (COMMA var)* RPAREN SEMI;
-do_while    : DO START (call | assigment)* END WHILE LPAREN expression RPAREN;
-if_else     : IF LPAREN expression RPAREN START (call | assigment | do_while)* END else_part START (call | assigment | do_while)* END;
+do_while    : DO START (call | assigment | assigment_p)* END WHILE LPAREN expression RPAREN;
+if_else     : IF LPAREN expression RPAREN START (call | assigment | assigment_p | do_while)* END else_part START (call | assigment | assigment_p | do_while)* END;
 else_part   : ELSE;
 assigment   : ID (COMMA ID)* ASSIGN (var | expression) SEMI;
+assigment_p : LBRACK ID (COMMA ID)* RBRACK ASSIGN LBRACK (var | expression)(COMMA (var | expression))* RBRACK SEMI;
 
 var         : NEG? LPAREN expression RPAREN | value | ids;
 value       : INT_VALUE | BOOLEAN_VALUE;

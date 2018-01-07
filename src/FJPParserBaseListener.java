@@ -219,6 +219,18 @@ public class FJPParserBaseListener implements FJPParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAssigment_p(FJPParser.Assigment_pContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssigment_p(FJPParser.Assigment_pContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVar(FJPParser.VarContext ctx) { }
 	/**
 	 * {@inheritDoc}

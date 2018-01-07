@@ -177,6 +177,16 @@ public interface FJPParserListener extends ParseTreeListener {
 	 */
 	void exitAssigment(FJPParser.AssigmentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FJPParser#assigment_p}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssigment_p(FJPParser.Assigment_pContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#assigment_p}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssigment_p(FJPParser.Assigment_pContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FJPParser#var}.
 	 * @param ctx the parse tree
 	 */

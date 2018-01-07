@@ -19,6 +19,7 @@ start
     start
         call delej(3);
         yy := true;
+        [x, y] := [10, 15];
         if(xx && yy)
         start
             y:= 5;

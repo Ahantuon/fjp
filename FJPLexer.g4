@@ -18,6 +18,8 @@ ELSE:           'else';
 // separatory
 LPAREN:         '(';
 RPAREN:         ')';
+LBRACK:         '[';
+RBRACK:         ']';
 SEMI:           ';';
 COMMA:          ',';
 
