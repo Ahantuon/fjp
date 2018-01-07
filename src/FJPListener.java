@@ -35,6 +35,7 @@ public class FJPListener extends FJPParserBaseListener{
     private int mainAddress = 0;
     private int ifJump = 0;
     private int elseJump = 0;
+    private List<String> parameters;
 
     private FJPListener() {
         base = 1;
@@ -45,6 +46,7 @@ public class FJPListener extends FJPParserBaseListener{
         localVariables = new HashMap<>();
         procedures = new HashMap<>();
         instructions = new ArrayList<>();
+        parameters = new ArrayList<>();
     }
 
     @Override
@@ -116,6 +118,17 @@ public class FJPListener extends FJPParserBaseListener{
                 System.exit(1);
             }
             localVariables.put(name, address);
+        }
+    }
+
+    @Override
+    public void exitVar(FJPParser.VarContext ctx) {
+        Object child = ctx.getChild(0);
+        if(child instanceof TerminalNode){
+            if(((TerminalNode)child).getSymbol().getType() == FJPLexer.NEG){
+                instructions.add(PL0InstructionsFactory.getLit(0));
+                instructions.add(PL0InstructionsFactory.getOpr(8));
+            }
         }
     }
 

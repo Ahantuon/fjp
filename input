@@ -1,5 +1,5 @@
 start
-    const KONSTANTA := 2;
+    const KONSTANTA := 5;
     int x := 2;
     int y;
     boolean xx := true;
@@ -13,7 +13,7 @@ start
         start
             x := x * ((2 + a) * 3);
             a := a + 1;
-        end while (a < KONSTANTA)
+        end while (!(a < KONSTANTA))
     end
 
     main
