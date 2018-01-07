@@ -147,6 +147,26 @@ public interface FJPParserListener extends ParseTreeListener {
 	 */
 	void exitDo_while(FJPParser.Do_whileContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FJPParser#while_do}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhile_do(FJPParser.While_doContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#while_do}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhile_do(FJPParser.While_doContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FJPParser#start_do}.
+	 * @param ctx the parse tree
+	 */
+	void enterStart_do(FJPParser.Start_doContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#start_do}.
+	 * @param ctx the parse tree
+	 */
+	void exitStart_do(FJPParser.Start_doContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FJPParser#if_else}.
 	 * @param ctx the parse tree
 	 */

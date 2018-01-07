@@ -94,6 +94,18 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDo_while(FJPParser.Do_whileContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FJPParser#while_do}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhile_do(FJPParser.While_doContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#start_do}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStart_do(FJPParser.Start_doContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FJPParser#if_else}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

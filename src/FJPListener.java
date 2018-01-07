@@ -33,6 +33,7 @@ public class FJPListener extends FJPParserBaseListener{
     private int procedureEnter = 0;
     private List<Integer> arguments;
     private int cycleJump = 0;
+    private int cycleEndJump = 0;
     private int globalsEndAddress = 0;
     private int mainAddress = 0;
     private int ifJump = 0;
@@ -87,7 +88,6 @@ public class FJPListener extends FJPParserBaseListener{
         procedures.put(ctx.ID().getText(), new Procedure(procedureEnter, STACK_SIZE + ctx.body().locales().variable().size(), arguments));
         arguments.clear();
     }
-
 
     @Override
     public void exitArguments(FJPParser.ArgumentsContext ctx) {
@@ -351,6 +351,26 @@ public class FJPListener extends FJPParserBaseListener{
         instructions.add(PL0InstructionsFactory.getOpr(10));
         instructions.add(PL0InstructionsFactory.getJmc(cycleJump));
     }
+
+    @Override
+    public void enterWhile_do(FJPParser.While_doContext ctx) {
+        cycleJump = instructions.size();
+    }
+
+    @Override
+    public void exitStart_do(FJPParser.Start_doContext ctx) {
+        instructions.add(PL0InstructionsFactory.getLit(1));
+        instructions.add(PL0InstructionsFactory.getOpr(11));
+        cycleEndJump = instructions.size();
+        instructions.add(PL0InstructionsFactory.getJmc(-1));
+    }
+
+    @Override
+    public void exitWhile_do(FJPParser.While_doContext ctx) {
+        instructions.add(PL0InstructionsFactory.getJmc(cycleJump));
+        instructions.set(cycleEndJump, PL0InstructionsFactory.getJmc(instructions.size()));
+    }
+
 
     @Override
     public void exitCall(FJPParser.CallContext ctx) {
