@@ -1,0 +1,304 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{hyperref}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{enumitem}
+
+
+\title{Překladač vlastního jazyka do instrukcí PL/0}
+\author{
+  Kotva, Pavel\\
+  \texttt{kotva@students.zcu.cz}
+  \and
+  Kohlíček, Jan\\
+  \texttt{kohl@students.zcu.cz}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{flushleft} 
+{\includegraphics[width=.5\textwidth]{./img/fav_logo.jpg}\\[3cm]}
+\end{flushleft}
+\begin{center}
+
+{\Large KIV/FJP - Semestrální práce}\\
+\vspace{0.3cm}
+{\Huge Překladač vlastního jazyka\\do instrukcí PL/0}\\
+\vspace{1cm}
+{\large Pavel Kotva - A17N0077P}\\
+\vspace{0.1cm}
+{\normalsize kotva@students.zcu.cz}\\
+\vspace{0.7cm}
+{\large Jan Kohlíček - A17N0075P}\\
+\vspace{0.1cm}
+{\normalsize kohl@students.zcu.cz}
+\vfill
+{\large \today}
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+\thispagestyle{empty}
+
+\chapter{Zadání}
+Cílem práce bude vytvoření překladače zvoleného jazyka. Je možné inspirovat se jazykem PL/0, vybrat si podmnožinu nějakého existujícího jazyka nebo si navrhnout jazyk zcela vlastní. Jazyk bude překládán do instrukcí PL/0. 
+\\
+\\
+Jazyk musí mít základní konstrukce:
+\begin{itemize}[noitemsep]
+	\item [-] definice celočíselných proměnných
+	\item [-] definice celočíselných konstant
+	\item [-] přiřazení
+	\item [-] základní aritmetiku a logiku (+, -, *, /, AND, OR, negace a závorky, operátory pro porovnání čísel)
+	\item [-] cyklus (libovolný)
+	\item [-] jednoduchou podmínku (if bez else)
+	\item [-] definice podprogramu (procedura, funkce, metoda) a jeho volání
+\end{itemize}
+\ \\
+Rozšiřující konstrukce:
+\begin{itemize}[noitemsep]
+	\item [-] každý další typ cyklu
+	\item [-] datový typ boolean a logické operace s ním
+	\item [-] else větev
+	\item [-] násobné přiřazení
+	\item [-] paralelní přiřazení
+	\item [-] parametry předávané hodnotou
+	\item [-] návratová hodnota podprogramu
+\end{itemize}
+
+\chapter{Syntaxe}
+
+\section{Proměnné a přiřazení}
+Jazyk je staticky typový, všechny proměnné musíme nejprve deklarovat s jejich datovým typem.\\
+\\
+Datové typy:
+\begin{description}
+	\item [int] - označení celočíselného datového typu.
+	\item [boolean] - logický datový typ. Boolean nabývá dvou hodnot: \textbf{true} (pravda) a \textbf{false} (nepravda). 
+\end{description}
+\ \\
+Deklarace proměnné bez přiřazení:
+\begin{verbatim}
+int x;
+boolean y;
+\end{verbatim}
+\ \\
+Deklarace proměnné s přiřazení:
+\begin{verbatim}
+boolean x := true;
+boolean y := false;
+int z := (3 * 3) + 1;
+\end{verbatim}
+\ \\
+Deklarace proměnných s násobným přiřazením:
+\begin{verbatim}
+int a;
+int b;
+int c;
+a, b, c := 5;
+\end{verbatim}
+\ \\
+Deklarace proměnných s paralelním přiřazením:
+\begin{verbatim}
+int a;
+int b;
+[a, b] := [10, 15];
+\end{verbatim}
+
+
+
+
+
+\subsection{Konstanty}
+Konstanty jsou deklarovány s klíčovým slovem \textbf{const} a mohou obsahovat jen celé číslo.
+\begin{verbatim}
+const KONSTANTA := 5;
+\end{verbatim}
+
+
+
+
+
+
+\section{Podmínky (větvení)}
+Podmínky zapisujeme pomocí klíčového slova \textbf{if}, za kterým následuje logický výraz. Pokud je výraz pravdivý, provede se následující příkaz. Pokud ne, následující příkaz se přeskočí a pokračuje se větví \textbf{else}. Zapsat větev \textbf{else} je povinné.
+\begin{verbatim}
+int i := 1;
+
+if(i > 1)
+start
+    i := 2;
+end
+else
+start
+    i := 4;
+end
+\end{verbatim}
+
+
+\subsection{Operátory}
+Relační operátory, které můžeme ve výrazech používat:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ c |  p{6cm}}
+ Operátor & Zápis \\ \hline\hline
+ 	
+Rovnost & \textbf{=} \\ \hline  
+Je ostře větší & \textbf{\textgreater} \\ \hline
+Je ostře menší & \textbf{\textless} \\ \hline
+Je větší nebo rovno & \textbf{\textgreater =} \\ \hline
+Je menší nebo rovno & \textbf{\textless =} \\ \hline
+Nerovnost & \textbf{!=} \\ \hline
+Obecná negace & \textbf{!} \\ \hline
+A zároveň & \textbf{\&\&} \\ \hline
+Nebo & \textbf{\textbar \textbar}  \\ \hline
+\end{tabular}
+\caption{Relační operátory}
+\label{table:relacni_operatory}
+\end{table}
+\ \\
+Podmínky je možné skládat a to pomocí dvou základních logických operátorů:
+\begin{table}[H]
+\centering
+\begin{tabular}{ c |  p{6cm}}
+ Operátor & Zápis \\ \hline\hline
+A zároveň & \textbf{\&\&} \\ \hline
+Nebo & \textbf{\textbar \textbar}  \\ \hline
+\end{tabular}
+\caption{Logické operátory}
+\label{table:logicke_operatory}
+\end{table}
+
+\section{Cykly}
+
+
+\subsection{While}
+Prvním typem cyklu je \textbf{while} cyklus funguje jednoduše opakuje příkazy v bloku dokud platí podmínka. Syntaxe cyklu je následující:
+
+\begin{verbatim}
+int i := 0;
+
+while(i < 4)
+start
+    i := i + 1;
+end
+\end{verbatim}
+
+\subsection{Do\textendash while}
+Posledním typem cyklu je \textbf{do\textendash while}. Je téměř stejný jako while, ale kontrolní podmínka je umístěna až na konec cyklu. Máme tedy jistotu, že minimálně jednou cyklus vždy proběhne. Syntaxe cyklu je následující:
+
+\begin{verbatim}
+int i := 0;
+
+do
+start
+    i := i + 1; 
+end while(i < 4)
+\end{verbatim}
+
+
+\section{Procedury}
+Procedura je logický blok kódu, který jednou napíšeme a poté ho můžeme libovolně volat bez toho, abychom ho psali znovu a opakovali se. Proceduru deklarujeme v globálním prostoru, někde nad \textbf{main}.
+
+\subsection{Procedura bez parametrů}
+Syntaxe procedura bez parametrů je následující:
+\begin{verbatim}
+procedure nazevprocedury()
+start
+    int b := 5;
+end
+
+call nazevprocedury();
+\end{verbatim}
+
+
+\subsection{Procedura s parametry}
+Procedura může mít také libovolný počet vstupních parametrů (někdy se jim říká argumenty), které píšeme do závorky v její definici. Rozšíříme tedy stávající proceduru o parametr \textbf{int a} a ten potom přidáme s konkrétní hodnotou do volání procedury:
+\begin{verbatim}
+procedure nazevprocedury(int a)
+start
+    int b := 5 + a;
+end
+
+call nazevprocedury(3);
+\end{verbatim}
+
+\subsection{Procedura s návratovou hodnotou}
+Procedura může dále vracet nějakou hodnotu, správně by se ji mělo říkat funkce, ale z historických důvodů a zachování kompatibility nazýváme procedura.  Procedura může vracet právě jednu hodnotu pomocí příkazu \textbf{return}. Syntaxe je následující:
+\begin{verbatim}
+procedure nazevprocedury(int a)
+start
+    int b := 5 + a;
+end
+return b;
+
+int y;
+call nazevprocedury(3)(y);
+\end{verbatim}
+
+
+
+
+\chapter{Implementace}
+Pro implementaci překladače byl vybrán jazyk \textbf{Java} a nástroj pro tvorbu syntaktických analyzátorů, kompilátorů a překladačů gramatiky \textbf{ANTLR}. \textbf{ANTLR 4.7} byl vybrán pro jeho snadnou a rychlou použitelnost.
+\\\\
+Popis adresářové struktury:
+\begin{itemize}[noitemsep]
+\item [+] \texttt{docs} - dokumentace
+\item [+] \texttt{src} - zdrojové kódy
+\item [.] \texttt{FJPLexer.g4} - obsahuje tokeny
+\item [.] \texttt{FJPParser.g4} - obrahuje gramatiku
+\end{itemize}
+
+
+\chapter{Vzorové programy a generované instrukce}
+
+\section{Program: Podmínky}
+Zdrojový kód:
+\begin{verbatim}
+kod
+\end{verbatim}
+\ \\
+Instrukce:
+\begin{verbatim}
+instrukce
+\end{verbatim}
+
+
+\section{Program: Cykly}
+Zdrojový kód:
+\begin{verbatim}
+kod
+\end{verbatim}
+\ \\
+Instrukce:
+\begin{verbatim}
+instrukce
+\end{verbatim}
+
+
+\section{Program: Procedury}
+Zdrojový kód:
+\begin{verbatim}
+kod
+
+\end{verbatim}
+\ \\
+Instrukce:
+\begin{verbatim}
+instrukce
+
+\end{verbatim}
+
+
+\chapter{Závěr}
+V semestrální práci byl vytvořen překladač do instrukcí \textbf{PL/0}. Splnily jsme všechny body, které jsme si určily v zadání.
+Syntaxe je originálním mixem syntaxe \textbf{C} a \textbf{Pascalu}.
+Zdrojové kódy jsou k dispozici na githubu: \url{https://github.com/Ahantuon/fjp} 
+
+
+\end{document}
