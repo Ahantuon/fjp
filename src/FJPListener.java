@@ -1,18 +1,20 @@
 package src;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import src.parser.FJPLexer;
+import src.parser.FJPParser;
+import src.parser.FJPParserBaseListener;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FJPListener extends FJPParserBaseListener{
+/**
+ * Listener for generating PL0 instruction for FJP grammar
+ */
+public class FJPListener extends FJPParserBaseListener {
     private static final int STACK_SIZE = 3;
     private static final int VARIABLE_INSTRUCTION_COUNT = 2;
     private static final int DEFAULT_VALUE = 0;
@@ -25,9 +27,7 @@ public class FJPListener extends FJPParserBaseListener{
     private Map<String, Integer> localVariables;
     private Map<String, Procedure> procedures;
 
-
     private int base;
-    private int top;
     private int level;
     private List<String> instructions;
     private int procedureEnter = 0;
@@ -40,9 +40,8 @@ public class FJPListener extends FJPParserBaseListener{
     private int ifJump = 0;
     private int elseJump = 0;
 
-    private FJPListener() {
+    FJPListener() {
         base = 1;
-        top = 0;
         level = 0;
         constants = new HashMap<>();
         variables = new HashMap<>();
@@ -52,31 +51,45 @@ public class FJPListener extends FJPParserBaseListener{
         arguments = new ArrayList<>();
     }
 
+    /**
+     * Jump on first instruction
+     */
     @Override
     public void enterProgram(FJPParser.ProgramContext ctx){
         instructions.add(PL0InstructionsFactory.getJmp(base));
     }
 
+    /**
+     * Print all instruction to output
+     */
     @Override
     public void exitProgram(FJPParser.ProgramContext ctx){
         printInstructions();
     }
 
+    /**
+     * Make space for globals variables and create jump on main which is set later
+     */
     @Override
     public void exitGlobals(FJPParser.GlobalsContext ctx){
         int variablesCount = ctx.getChildCount();
         int totalSize = STACK_SIZE + variablesCount;
         instructions.add(instructions.size() - (VARIABLE_INSTRUCTION_COUNT * variablesCount), PL0InstructionsFactory.getInt(totalSize));
-        top = totalSize;
         globalsEndAddress = instructions.size();
         instructions.add(PL0InstructionsFactory.getJmp(0));
     }
 
+    /**
+     * Add constant values
+     */
     @Override
     public void exitConstant(FJPParser.ConstantContext ctx) {
         constants.put(ctx.ID().getText(), Integer.parseInt(ctx.INT_VALUE().getText()));
     }
 
+    /**
+     * Prepare start procedure
+     */
     @Override
     public void enterProcedure(FJPParser.ProcedureContext ctx) {
         procedureReturn = -1;
@@ -84,6 +97,9 @@ public class FJPListener extends FJPParserBaseListener{
         localVariables.clear();
     }
 
+    /**
+     * Prepare return value and instruction for save it which is set later
+     */
     @Override
     public void exitReturn_val(FJPParser.Return_valContext ctx) {
         if(ctx.ID() != null && localVariables.containsKey(ctx.ID().getText())){
@@ -94,6 +110,9 @@ public class FJPListener extends FJPParserBaseListener{
         }
     }
 
+    /**
+     * Create Procedure for late use, clear arguments
+     */
     @Override
     public void exitProcedure(FJPParser.ProcedureContext ctx) {
         instructions.add(PL0InstructionsFactory.getRet());
@@ -105,6 +124,9 @@ public class FJPListener extends FJPParserBaseListener{
         arguments.clear();
     }
 
+    /**
+     * Prepare procedure arguments as local variables
+     */
     @Override
     public void exitArguments(FJPParser.ArgumentsContext ctx) {
         int argumentsCount = 0;
@@ -120,16 +142,20 @@ public class FJPListener extends FJPParserBaseListener{
             instructions.add(PL0InstructionsFactory.getLit(-1));
             instructions.add(PL0InstructionsFactory.getSto(level,STACK_SIZE + i));
         }
-        top += argumentsCount * 2;
     }
 
+    /**
+     * Prepare space for local variables
+     */
     @Override
     public void exitLocales(FJPParser.LocalesContext ctx){
         int variablesCount = ctx.getChildCount();
         instructions.add(instructions.size() - (VARIABLE_INSTRUCTION_COUNT * variablesCount), PL0InstructionsFactory.getInt(variablesCount));
-        top = variablesCount;
     }
 
+    /**
+     * Parse variable (int or boolean) and add to local or global variables
+     */
     @Override
     public void exitVariable(FJPParser.VariableContext ctx) {
         int address;
@@ -153,6 +179,9 @@ public class FJPListener extends FJPParserBaseListener{
         }
     }
 
+    /**
+     * Do negation if var contains it
+     */
     @Override
     public void exitVar(FJPParser.VarContext ctx) {
         Object child = ctx.getChild(0);
@@ -164,16 +193,25 @@ public class FJPListener extends FJPParserBaseListener{
         }
     }
 
+    /**
+     * Set level for enter to body of procedure / main
+     */
     @Override
     public void enterBody(FJPParser.BodyContext ctx) {
         level = 1;
     }
 
+    /**
+     * Set level for enter to body of procedure / main
+     */
     @Override
     public void exitBody(FJPParser.BodyContext ctx) {
         level = 0;
     }
 
+    /**
+     * Get value from ID (identification of local or global variable or constant)
+     */
     @Override
     public void exitIds(FJPParser.IdsContext ctx) {
         int value;
@@ -191,9 +229,11 @@ public class FJPListener extends FJPParserBaseListener{
             System.out.println("Neexitujici identifikator: " + id + " : " + ctx.getStart());
             System.exit(1);
         }
-
     }
 
+    /**
+     * Parse value (int or boolean) and put on top of stact if is not call value
+     */
     @Override
     public void exitValue(FJPParser.ValueContext ctx) {
         if(ctx.parent != null && ctx.parent.parent != null && !(ctx.parent.parent instanceof FJPParser.CallContext)){
@@ -209,6 +249,9 @@ public class FJPListener extends FJPParserBaseListener{
         }
     }
 
+    /**
+     * Add instruction for logic and, multiple or divine
+     */
     @Override
     public void exitTerm(FJPParser.TermContext ctx) {
         for (int i = 0; i < ctx.getChildCount(); i++) {
@@ -218,21 +261,21 @@ public class FJPListener extends FJPParserBaseListener{
                         instructions.add(PL0InstructionsFactory.getOpr(2));
                         instructions.add(PL0InstructionsFactory.getLit(2));
                         instructions.add(PL0InstructionsFactory.getOpr(8));
-                        top--;
                         break;
                     case FJPLexer.MUL:
                         instructions.add(PL0InstructionsFactory.getOpr(4));
-                        top--;
                         break;
                     case FJPLexer.DIV:
                         instructions.add(PL0InstructionsFactory.getOpr(5));
-                        top--;
                         break;
                 }
             }
         }
     }
 
+    /**
+     * Add instruction for plus, minus or logic or
+     */
     @Override
     public void exitSimpleExp(FJPParser.SimpleExpContext ctx) {
         for (int i = 0; i < ctx.getChildCount(); i++) {
@@ -240,23 +283,23 @@ public class FJPListener extends FJPParserBaseListener{
                 switch (((TerminalNode)ctx.getChild(i)).getSymbol().getType()){
                     case FJPLexer.ADD:
                         instructions.add(PL0InstructionsFactory.getOpr(2));
-                        top--;
                         break;
                     case FJPLexer.SUB:
                         instructions.add(PL0InstructionsFactory.getOpr(3));
-                        top--;
                         break;
                     case FJPLexer.OR:
                         instructions.add(PL0InstructionsFactory.getOpr(2));
                         instructions.add(PL0InstructionsFactory.getLit(1));
                         instructions.add(PL0InstructionsFactory.getOpr(11));
-                        top--;
                         break;
                 }
             }
         }
     }
 
+    /**
+     * Add instruction for logic equal, logic not equal, less, less or same, great or great or same
+     */
     @Override
     public void exitExpression(FJPParser.ExpressionContext ctx) {
         for (int i = 0; i < ctx.getChildCount(); i++) {
@@ -264,32 +307,26 @@ public class FJPListener extends FJPParserBaseListener{
                 switch (((TerminalNode)ctx.getChild(i)).getSymbol().getType()){
                     case FJPLexer.EQUAL:
                         instructions.add(PL0InstructionsFactory.getOpr(8));
-                        top--;
                         break;
                     case FJPLexer.NOT_EQUAL:
                         instructions.add(PL0InstructionsFactory.getOpr(9));
-                        top--;
                         break;
                     case FJPLexer.LT:
                         instructions.add(PL0InstructionsFactory.getOpr(10));
-                        top--;
                         break;
                     case FJPLexer.LE:
                         instructions.add(PL0InstructionsFactory.getOpr(13));
-                        top--;
                         break;
                     case FJPLexer.GE:
                         instructions.add(PL0InstructionsFactory.getOpr(11));
-                        top--;
                         break;
                     case FJPLexer.GT:
                         instructions.add(PL0InstructionsFactory.getOpr(12));
-                        top--;
                         break;
                 }
             }
         }
-        if(ctx.getParent() instanceof FJPParser.If_elseContext){
+        if(ctx.getParent() instanceof FJPParser.If_elseContext){ // for else jump
             instructions.add(PL0InstructionsFactory.getLit(1));
             instructions.add(PL0InstructionsFactory.getOpr(11));
             elseJump = instructions.size();
@@ -297,6 +334,9 @@ public class FJPListener extends FJPParserBaseListener{
         }
     }
 
+    /**
+     * Add jump on if and set jump for else
+     */
     @Override
     public void exitElse_part(FJPParser.Else_partContext ctx) {
         ifJump = instructions.size();
@@ -304,11 +344,17 @@ public class FJPListener extends FJPParserBaseListener{
         instructions.set(elseJump, PL0InstructionsFactory.getJmc(instructions.size()));
     }
 
+    /**
+     * Set jump for if
+     */
     @Override
     public void exitIf_else(FJPParser.If_elseContext ctx) {
         instructions.set(ifJump, PL0InstructionsFactory.getJmp(instructions.size()));
     }
 
+    /**
+     * Get value of assignment for assign
+     */
     @Override
     public void exitAssigment(FJPParser.AssigmentContext ctx) {
         List<TerminalNode> ids = ctx.ID();
@@ -329,9 +375,11 @@ public class FJPListener extends FJPParserBaseListener{
                 System.exit(1);
             }
         }
-        top--;
     }
 
+    /**
+     * Get values of assignment for parallel assign
+     */
     @Override
     public void exitAssigment_p(FJPParser.Assigment_pContext ctx) {
         List<TerminalNode> ids = ctx.ID();
@@ -352,15 +400,19 @@ public class FJPListener extends FJPParserBaseListener{
             System.out.println("Spatny pocet v prirazeni: " + ctx.getStart());
             System.exit(1);
         }
-
-        top -= vars.size();
     }
 
+    /**
+     * Save instruction for repeat until cycle
+     */
     @Override
     public void enterRe_until(FJPParser.Re_untilContext ctx) {
         cycleJump = instructions.size();
     }
 
+    /**
+     * Add instruction for repeat until condition
+     */
     @Override
     public void exitRe_until(FJPParser.Re_untilContext ctx) {
         instructions.add(PL0InstructionsFactory.getLit(1));
@@ -368,11 +420,17 @@ public class FJPListener extends FJPParserBaseListener{
         instructions.add(PL0InstructionsFactory.getJmc(cycleJump));
     }
 
+    /**
+     * Save instruction for do while cycle
+     */
     @Override
     public void enterDo_while(FJPParser.Do_whileContext ctx) {
         cycleJump = instructions.size();
     }
 
+    /**
+     * Add instruction for do while condition
+     */
     @Override
     public void exitDo_while(FJPParser.Do_whileContext ctx) {
         instructions.add(PL0InstructionsFactory.getLit(1));
@@ -380,11 +438,17 @@ public class FJPListener extends FJPParserBaseListener{
         instructions.add(PL0InstructionsFactory.getJmc(cycleJump));
     }
 
+    /**
+     * Save instruction for while do cycle
+     */
     @Override
     public void enterWhile_do(FJPParser.While_doContext ctx) {
         cycleJump = instructions.size();
     }
 
+    /**
+     * Add instruction for while do condition and save cycle end position
+     */
     @Override
     public void exitStart_do(FJPParser.Start_doContext ctx) {
         instructions.add(PL0InstructionsFactory.getLit(1));
@@ -393,13 +457,18 @@ public class FJPListener extends FJPParserBaseListener{
         instructions.add(PL0InstructionsFactory.getJmc(-1));
     }
 
+    /**
+     * Add instruction for while do condition
+     */
     @Override
     public void exitWhile_do(FJPParser.While_doContext ctx) {
         instructions.add(PL0InstructionsFactory.getJmp(cycleJump));
         instructions.set(cycleEndJump, PL0InstructionsFactory.getJmc(instructions.size()));
     }
 
-
+    /**
+     * Create call procedure with arguments
+     */
     @Override
     public void exitCall(FJPParser.CallContext ctx) {
         String id = ctx.ID().getText();
@@ -437,6 +506,9 @@ public class FJPListener extends FJPParserBaseListener{
         }
     }
 
+    /**
+     * Set instruction for save return value of procedure
+     */
     @Override
     public void exitReturn_id(FJPParser.Return_idContext ctx) {
         if(ctx != null){
@@ -456,24 +528,37 @@ public class FJPListener extends FJPParserBaseListener{
         }
     }
 
+    /**
+     * Clear local variable before main started and save main address for calling main after set globals
+     */
     @Override
     public void enterMain(FJPParser.MainContext ctx) {
         mainAddress = instructions.size();
         localVariables.clear();
     }
 
+    /**
+     * Exit main and set jump after set global variables
+     */
     @Override
     public void exitMain(FJPParser.MainContext ctx) {
         instructions.add(PL0InstructionsFactory.getRet());
         instructions.set(globalsEndAddress, PL0InstructionsFactory.getJmp(mainAddress));
     }
 
+    /**
+     * Print instruction on standard output
+     */
     private void printInstructions(){
         for (int i = 0; i < instructions.size(); i++) {
             System.out.println(i + "\t" + instructions.get(i));
         }
     }
 
+    /**
+     * Parse variable context - int or boolean
+     * @return name of variable
+     */
     private String parseVariableContext(FJPParser.VariableContext ctx, int address) {
         int value;
         String name;
@@ -488,6 +573,10 @@ public class FJPListener extends FJPParserBaseListener{
         return name;
     }
 
+    /**
+     * Parse int value from node (string)
+     * @return int value
+     */
     private int parseIntValue(TerminalNode terminalNode) {
         int value = DEFAULT_VALUE;
         if(terminalNode != null){
@@ -496,6 +585,10 @@ public class FJPListener extends FJPParserBaseListener{
         return value;
     }
 
+    /**
+     * Parse bolean value from node (string)
+     * @return boolean value
+     */
     private int parseBooleanValue(TerminalNode terminalNode) {
         int value = DEFAULT_VALUE;
         if(terminalNode != null && terminalNode.getText().equals(TRUE_TEXT)){
@@ -504,25 +597,11 @@ public class FJPListener extends FJPParserBaseListener{
         return value;
     }
 
+    /**
+     * Add variable to stack
+     */
     private void addVariable(int address, int value) {
         instructions.add(PL0InstructionsFactory.getLit(value));
         instructions.add(PL0InstructionsFactory.getSto(0, address));
-    }
-
-    public static void main(String[] args) {
-        try {
-            InputStream stream = new FileInputStream(args[0]);
-            FJPLexer lexer = new FJPLexer(CharStreams.fromStream(stream, StandardCharsets.UTF_8));
-            FJPParser parser = new FJPParser(new CommonTokenStream(lexer));
-            parser.addParseListener(new FJPListener());
-
-            // Start parsing
-            parser.program();
-        } catch (IOException e) {
-            System.out.println("Chybny vstupni soubor: " + e.getMessage());
-        } catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Nastala chyba pri prekladu: " + e.getMessage());
-        }
     }
 }
