@@ -10,6 +10,9 @@ END:            'end';
 CALL:           'call';
 MAIN:           'main';
 WHILE:          'while';
+DO:             'do';
+IF:             'if';
+ELSE:           'else';
 
 
 // separatory
@@ -33,8 +36,8 @@ GE:             '>=';
 EQUAL:          '=';
 NOT_EQUAL:      '!=';
 NEG:            '!';
-AND:            'and';
-OR:             'or';
+AND:            '&&';
+OR:             '||';
 ADD:            '+';
 SUB:            '-';
 MUL:            '*';

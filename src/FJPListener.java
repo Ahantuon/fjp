@@ -16,6 +16,8 @@ public class FJPListener extends FJPParserBaseListener{
     private static final int VARIABLE_INSTRUCTION_COUNT = 2;
     private static final int DEFAULT_VALUE = 0;
     private static final int TRUE_VALUE = 1;
+    private static final String TRUE_TEXT = "true";
+    private static final String FALSE_TEXT = "false";
 
     private Map<String, Integer> constants;
     private Map<String, Integer> variables;
@@ -28,6 +30,10 @@ public class FJPListener extends FJPParserBaseListener{
     private int level;
     private List<String> instructions;
     private int procedureEnter = 0;
+    private int cycleJump = 0;
+    private int globalsEndAddress = 0;
+    private int mainAddress = 0;
+    private int elseJump = 0;
 
     public FJPListener() {
         base = 1;
@@ -46,11 +52,18 @@ public class FJPListener extends FJPParserBaseListener{
     }
 
     @Override
+    public void exitProgram(FJPParser.ProgramContext ctx){
+        printInstructions();
+    }
+
+    @Override
     public void exitGlobals(FJPParser.GlobalsContext ctx){
         int variablesCount = ctx.getChildCount();
         int totalSize = STACK_SIZE + variablesCount;
         instructions.add(instructions.size() - (VARIABLE_INSTRUCTION_COUNT * variablesCount), PL0InstructionsFactory.getInt(totalSize));
         top = totalSize;
+        globalsEndAddress = instructions.size();
+        instructions.add(PL0InstructionsFactory.getJmp(0));
     }
 
     @Override
@@ -89,10 +102,16 @@ public class FJPListener extends FJPParserBaseListener{
         if(ctx.getParent().getRuleIndex() == FJPParser.RULE_globals){
             address = STACK_SIZE + variables.size();
             name = parseVariableContext(ctx, address);
+            if(variables.containsKey(name) || constants.containsKey(name)){
+                //TODO throw new Exception("Tento identifikator jiz existuje: " + name + " : " + ctx.getStart());
+            }
             variables.put(name, address);
         }else{ // locale variable
             address = STACK_SIZE + localVariables.size();
             name = parseVariableContext(ctx, address);
+            if(localVariables.containsKey(name) || constants.containsKey(name)){
+                //TODO throw new Exception("Tento identifikator jiz existuje: " + name + " : " + ctx.getStart());
+            }
             localVariables.put(name, address);
         }
     }
@@ -110,8 +129,172 @@ public class FJPListener extends FJPParserBaseListener{
     }
 
     @Override
+    public void exitIds(FJPParser.IdsContext ctx) {
+        int value = DEFAULT_VALUE;
+        String id = ctx.ID().getText();
+        if(localVariables.containsKey(id)){
+            value = localVariables.get(id);
+        }else if(constants.containsKey(id)){
+            value = constants.get(id);
+        }else if(variables.containsKey(id)){
+            value = variables.get(id);
+        }else{
+            //TODO throw new Exception("Neexitujici identifikator: " + id + " : " + ctx.getStart());
+        }
+        instructions.add(PL0InstructionsFactory.getLod(level, value));
+    }
+
+    @Override
+    public void exitValue(FJPParser.ValueContext ctx) {
+        TerminalNode terminalNode = (TerminalNode) ctx.getChild(0);
+        String text = ctx.getParent().getText();
+        int value;
+        if(text.equals(TRUE_TEXT) || text.equals(FALSE_TEXT)){
+            value = parseBooleanValue(terminalNode);
+        }else{
+            value = parseIntValue(terminalNode);
+        }
+        instructions.add(PL0InstructionsFactory.getLit(value));
+    }
+
+    @Override
+    public void exitTerm(FJPParser.TermContext ctx) {
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            if(ctx.getChild(i) instanceof TerminalNode){
+                switch (((TerminalNode)ctx.getChild(i)).getSymbol().getType()){
+                    case FJPLexer.AND:
+                        instructions.add(PL0InstructionsFactory.getOpr(2));
+                        instructions.add(PL0InstructionsFactory.getLit(2));
+                        instructions.add(PL0InstructionsFactory.getOpr(8));
+                        top--;
+                        break;
+                    case FJPLexer.MUL:
+                        instructions.add(PL0InstructionsFactory.getOpr(4));
+                        top--;
+                        break;
+                    case FJPLexer.DIV:
+                        instructions.add(PL0InstructionsFactory.getOpr(5));
+                        top--;
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void exitSimpleExp(FJPParser.SimpleExpContext ctx) {
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            if(ctx.getChild(i) instanceof TerminalNode){
+                switch (((TerminalNode)ctx.getChild(i)).getSymbol().getType()){
+                    case FJPLexer.ADD:
+                        instructions.add(PL0InstructionsFactory.getOpr(2));
+                        top--;
+                        break;
+                    case FJPLexer.SUB:
+                        instructions.add(PL0InstructionsFactory.getOpr(3));
+                        top--;
+                        break;
+                    case FJPLexer.OR:
+                        instructions.add(PL0InstructionsFactory.getOpr(2));
+                        instructions.add(PL0InstructionsFactory.getLit(1));
+                        instructions.add(PL0InstructionsFactory.getOpr(11));
+                        top--;
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void exitExpression(FJPParser.ExpressionContext ctx) {
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            if(ctx.getChild(i) instanceof TerminalNode){
+                switch (((TerminalNode)ctx.getChild(i)).getSymbol().getType()){
+                    case FJPLexer.EQUAL:
+                        instructions.add(PL0InstructionsFactory.getOpr(8));
+                        top--;
+                        break;
+                    case FJPLexer.NOT_EQUAL:
+                        instructions.add(PL0InstructionsFactory.getOpr(9));
+                        top--;
+                        break;
+                    case FJPLexer.LT:
+                        instructions.add(PL0InstructionsFactory.getOpr(10));
+                        top--;
+                        break;
+                    case FJPLexer.LE:
+                        instructions.add(PL0InstructionsFactory.getOpr(13));
+                        top--;
+                        break;
+                    case FJPLexer.GE:
+                        instructions.add(PL0InstructionsFactory.getOpr(11));
+                        top--;
+                        break;
+                    case FJPLexer.GT:
+                        instructions.add(PL0InstructionsFactory.getOpr(12));
+                        top--;
+                        break;
+                }
+            }
+        }
+        if(ctx.getParent() instanceof FJPParser.If_elseContext){
+            instructions.add(PL0InstructionsFactory.getLit(1));
+            instructions.add(PL0InstructionsFactory.getOpr(11));
+            elseJump = instructions.size();
+            instructions.add(PL0InstructionsFactory.getJmp(0));
+        }
+    }
+
+    @Override
+    public void exitElse_part(FJPParser.Else_partContext ctx) {
+        instructions.set(elseJump, PL0InstructionsFactory.getJmp(instructions.size()));
+    }
+
+    @Override
+    public void exitAssigment(FJPParser.AssigmentContext ctx) {
+        String id = ctx.ID().getText();
+        if(localVariables.containsKey(id)){
+            instructions.add(PL0InstructionsFactory.getSto(level, localVariables.get(id)));
+        }else if(variables.containsKey(id)){
+            instructions.add(PL0InstructionsFactory.getSto(0, variables.get(id))); //global variable
+        }else{
+            //TODO throw new Exception("Neexitujici identifikator: " + id + " : " + ctx.getStart());
+        }
+        top--;
+    }
+
+    @Override
+    public void enterDo_while(FJPParser.Do_whileContext ctx) {
+        cycleJump = instructions.size();
+    }
+
+    @Override
+    public void exitDo_while(FJPParser.Do_whileContext ctx) {
+        instructions.add(PL0InstructionsFactory.getLit(1));
+        instructions.add(PL0InstructionsFactory.getOpr(10));
+        instructions.add(PL0InstructionsFactory.getJmc(cycleJump));
+    }
+
+    @Override
+    public void exitCall(FJPParser.CallContext ctx) {
+        String id = ctx.ID().getText();
+        if(procedures.containsKey(id)){
+            Procedure procedure = procedures.get(id);
+            instructions.add(PL0InstructionsFactory.getCal(level, procedure.getAddress()));
+            base += procedure.getSize();
+        }else{
+            //TODO throw new Exception("Neexitujici procedura: " + id + " : " + ctx.getStart());
+        }
+    }
+
+    @Override
+    public void enterMain(FJPParser.MainContext ctx) {
+        mainAddress = instructions.size();
+    }
+
+    @Override
     public void exitMain(FJPParser.MainContext ctx) {
-        printInstructions();
+        instructions.set(globalsEndAddress, PL0InstructionsFactory.getJmp(mainAddress));
     }
 
     private void printInstructions(){
@@ -144,7 +327,7 @@ public class FJPListener extends FJPParserBaseListener{
 
     private int parseBooleanValue(TerminalNode terminalNode) {
         int value = DEFAULT_VALUE;
-        if(terminalNode != null && terminalNode.getText().equals("true")){
+        if(terminalNode != null && terminalNode.getText().equals(TRUE_TEXT)){
             value = TRUE_VALUE;
         }
         return value;

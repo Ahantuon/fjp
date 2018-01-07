@@ -67,6 +67,16 @@ public interface FJPParserListener extends ParseTreeListener {
 	 */
 	void exitBoolean_var(FJPParser.Boolean_varContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FJPParser#arguments}.
+	 * @param ctx the parse tree
+	 */
+	void enterArguments(FJPParser.ArgumentsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#arguments}.
+	 * @param ctx the parse tree
+	 */
+	void exitArguments(FJPParser.ArgumentsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FJPParser#argument}.
 	 * @param ctx the parse tree
 	 */
@@ -127,15 +137,35 @@ public interface FJPParserListener extends ParseTreeListener {
 	 */
 	void exitCall(FJPParser.CallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FJPParser#while_cycle}.
+	 * Enter a parse tree produced by {@link FJPParser#do_while}.
 	 * @param ctx the parse tree
 	 */
-	void enterWhile_cycle(FJPParser.While_cycleContext ctx);
+	void enterDo_while(FJPParser.Do_whileContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link FJPParser#while_cycle}.
+	 * Exit a parse tree produced by {@link FJPParser#do_while}.
 	 * @param ctx the parse tree
 	 */
-	void exitWhile_cycle(FJPParser.While_cycleContext ctx);
+	void exitDo_while(FJPParser.Do_whileContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FJPParser#if_else}.
+	 * @param ctx the parse tree
+	 */
+	void enterIf_else(FJPParser.If_elseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#if_else}.
+	 * @param ctx the parse tree
+	 */
+	void exitIf_else(FJPParser.If_elseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FJPParser#else_part}.
+	 * @param ctx the parse tree
+	 */
+	void enterElse_part(FJPParser.Else_partContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#else_part}.
+	 * @param ctx the parse tree
+	 */
+	void exitElse_part(FJPParser.Else_partContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FJPParser#assigment}.
 	 * @param ctx the parse tree
@@ -156,6 +186,26 @@ public interface FJPParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVar(FJPParser.VarContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FJPParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void enterValue(FJPParser.ValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void exitValue(FJPParser.ValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FJPParser#ids}.
+	 * @param ctx the parse tree
+	 */
+	void enterIds(FJPParser.IdsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FJPParser#ids}.
+	 * @param ctx the parse tree
+	 */
+	void exitIds(FJPParser.IdsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FJPParser#expression}.
 	 * @param ctx the parse tree

@@ -46,6 +46,12 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolean_var(FJPParser.Boolean_varContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FJPParser#arguments}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArguments(FJPParser.ArgumentsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FJPParser#argument}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -82,11 +88,23 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCall(FJPParser.CallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link FJPParser#while_cycle}.
+	 * Visit a parse tree produced by {@link FJPParser#do_while}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitWhile_cycle(FJPParser.While_cycleContext ctx);
+	T visitDo_while(FJPParser.Do_whileContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#if_else}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIf_else(FJPParser.If_elseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#else_part}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElse_part(FJPParser.Else_partContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FJPParser#assigment}.
 	 * @param ctx the parse tree
@@ -99,6 +117,18 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVar(FJPParser.VarContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValue(FJPParser.ValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FJPParser#ids}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIds(FJPParser.IdsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FJPParser#expression}.
 	 * @param ctx the parse tree

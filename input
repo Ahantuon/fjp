@@ -8,15 +8,24 @@ start
     procedure delej (int a)
     start
         int b;
-        while (a < KONSTANTA)
+        do
         start
-            x := x + 1;
+            x := x * 2 + a * 3;
             a := a + 1;
-        end
+        end while (a < KONSTANTA)
     end
 
     main
     start
         call delej(3);
+        yy := true;
+        if(xx && yy)
+        start
+            y:= 5;
+        end
+        else
+        start
+            y:= 3;
+        end
     end
 end
