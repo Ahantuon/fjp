@@ -2,6 +2,7 @@ package src;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.io.*;
@@ -30,12 +31,12 @@ public class FJPListener extends FJPParserBaseListener{
     private int level;
     private List<String> instructions;
     private int procedureEnter = 0;
+    private List<Integer> arguments;
     private int cycleJump = 0;
     private int globalsEndAddress = 0;
     private int mainAddress = 0;
     private int ifJump = 0;
     private int elseJump = 0;
-    private List<String> parameters;
 
     private FJPListener() {
         base = 1;
@@ -46,7 +47,7 @@ public class FJPListener extends FJPParserBaseListener{
         localVariables = new HashMap<>();
         procedures = new HashMap<>();
         instructions = new ArrayList<>();
-        parameters = new ArrayList<>();
+        arguments = new ArrayList<>();
     }
 
     @Override
@@ -77,25 +78,40 @@ public class FJPListener extends FJPParserBaseListener{
     @Override
     public void enterProcedure(FJPParser.ProcedureContext ctx) {
         procedureEnter = instructions.size();
+        localVariables.clear();
     }
 
     @Override
     public void exitProcedure(FJPParser.ProcedureContext ctx) {
-        procedures.put(ctx.ID().getText(), new Procedure(procedureEnter, STACK_SIZE + ctx.body().locales().variable().size()));
-
+        instructions.add(PL0InstructionsFactory.getRet());
+        procedures.put(ctx.ID().getText(), new Procedure(procedureEnter, STACK_SIZE + ctx.body().locales().variable().size(), arguments));
+        arguments.clear();
     }
 
+
     @Override
-    public void exitArgument(FJPParser.ArgumentContext ctx) {
-        //TODO
+    public void exitArguments(FJPParser.ArgumentsContext ctx) {
+        int argumentsCount = 0;
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            if(ctx.getChild(i) instanceof FJPParser.ArgumentContext){
+                localVariables.put(ctx.getChild(i).getChild(1).getText(), top + argumentsCount);
+                argumentsCount++;
+            }
+        }
+        instructions.add(PL0InstructionsFactory.getInt(STACK_SIZE + argumentsCount));
+        for (int i = 0; i < argumentsCount; i++) {
+            arguments.add(instructions.size());
+            instructions.add(PL0InstructionsFactory.getLit(-1));
+            instructions.add(PL0InstructionsFactory.getSto(level,STACK_SIZE + i));
+        }
+        top += argumentsCount * 2;
     }
 
     @Override
     public void exitLocales(FJPParser.LocalesContext ctx){
-        int variablesCount = localVariables.size();
-        int totalSize = STACK_SIZE + variablesCount;
-        instructions.add(instructions.size() - (VARIABLE_INSTRUCTION_COUNT * variablesCount), PL0InstructionsFactory.getInt(totalSize));
-        top = totalSize;
+        int variablesCount = ctx.getChildCount();
+        instructions.add(instructions.size() - (VARIABLE_INSTRUCTION_COUNT * variablesCount), PL0InstructionsFactory.getInt(variablesCount));
+        top = variablesCount;
     }
 
     @Override
@@ -134,13 +150,11 @@ public class FJPListener extends FJPParserBaseListener{
 
     @Override
     public void enterBody(FJPParser.BodyContext ctx) {
-        localVariables.clear();
         level = 1;
     }
 
     @Override
     public void exitBody(FJPParser.BodyContext ctx) {
-        instructions.add(PL0InstructionsFactory.getRet());
         level = 0;
     }
 
@@ -166,15 +180,17 @@ public class FJPListener extends FJPParserBaseListener{
 
     @Override
     public void exitValue(FJPParser.ValueContext ctx) {
-        TerminalNode terminalNode = (TerminalNode) ctx.getChild(0);
-        String text = ctx.getParent().getText();
-        int value;
-        if(text.equals(TRUE_TEXT) || text.equals(FALSE_TEXT)){
-            value = parseBooleanValue(terminalNode);
-        }else{
-            value = parseIntValue(terminalNode);
+        if(ctx.parent != null && ctx.parent.parent != null && !(ctx.parent.parent instanceof FJPParser.CallContext)){
+            TerminalNode terminalNode = (TerminalNode) ctx.getChild(0);
+            String text = ctx.getParent().getText();
+            int value;
+            if(text.equals(TRUE_TEXT) || text.equals(FALSE_TEXT)){
+                value = parseBooleanValue(terminalNode);
+            }else{
+                value = parseIntValue(terminalNode);
+            }
+            instructions.add(PL0InstructionsFactory.getLit(value));
         }
-        instructions.add(PL0InstructionsFactory.getLit(value));
     }
 
     @Override
@@ -308,6 +324,31 @@ public class FJPListener extends FJPParserBaseListener{
         String id = ctx.ID().getText();
         if(procedures.containsKey(id)){
             Procedure procedure = procedures.get(id);
+            List<Integer> procedureArgumentsValues = new ArrayList<>();
+            for (int i = 0; i < ctx.getChildCount(); i++) {
+                if(ctx.getChild(i) instanceof FJPParser.VarContext){
+                    ParseTree child = ctx.getChild(i).getChild(0);
+                    if(child instanceof FJPParser.ValueContext){
+                        procedureArgumentsValues.add(Integer.parseInt(child.getText()));
+                    }else if(child instanceof FJPParser.IdsContext){
+                        int value = DEFAULT_VALUE;
+                        String text = child.getText();
+                        if(constants.containsKey(text)){
+                            value = constants.get(text);
+                        }
+                        procedureArgumentsValues.add(value);
+                    }
+                }
+            }
+            List<Integer> procedureArgumentsForSet = procedure.getArguments();
+            if(procedureArgumentsValues.size() == procedureArgumentsForSet.size()){
+                for (int i = 0; i < procedureArgumentsValues.size(); i++) {
+                    instructions.set(procedureArgumentsForSet.get(i), PL0InstructionsFactory.getLit(procedureArgumentsValues.get(i)));
+                }
+            }else{
+                System.out.println("Spatne parametry u procedury: " + id + " : " + ctx.getStart());
+                System.exit(1);
+            }
             instructions.add(PL0InstructionsFactory.getCal(level, procedure.getAddress()));
         }else{
             System.out.println("Neexitujici procedura: " + id + " : " + ctx.getStart());
@@ -318,10 +359,12 @@ public class FJPListener extends FJPParserBaseListener{
     @Override
     public void enterMain(FJPParser.MainContext ctx) {
         mainAddress = instructions.size();
+        localVariables.clear();
     }
 
     @Override
     public void exitMain(FJPParser.MainContext ctx) {
+        instructions.add(PL0InstructionsFactory.getRet());
         instructions.set(globalsEndAddress, PL0InstructionsFactory.getJmp(mainAddress));
     }
 

@@ -7,7 +7,6 @@ start
 
     procedure delej (int a)
     start
-        int a := 1;
         int b;
         do
         start
