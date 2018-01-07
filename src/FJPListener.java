@@ -33,9 +33,10 @@ public class FJPListener extends FJPParserBaseListener{
     private int cycleJump = 0;
     private int globalsEndAddress = 0;
     private int mainAddress = 0;
+    private int ifJump = 0;
     private int elseJump = 0;
 
-    public FJPListener() {
+    private FJPListener() {
         base = 1;
         top = 0;
         level = 0;
@@ -103,14 +104,16 @@ public class FJPListener extends FJPParserBaseListener{
             address = STACK_SIZE + variables.size();
             name = parseVariableContext(ctx, address);
             if(variables.containsKey(name) || constants.containsKey(name)){
-                //TODO throw new Exception("Tento identifikator jiz existuje: " + name + " : " + ctx.getStart());
+                System.out.println("Tento identifikator jiz existuje: " + name + " : " + ctx.getStart());
+                System.exit(1);
             }
             variables.put(name, address);
         }else{ // locale variable
             address = STACK_SIZE + localVariables.size();
             name = parseVariableContext(ctx, address);
             if(localVariables.containsKey(name) || constants.containsKey(name)){
-                //TODO throw new Exception("Tento identifikator jiz existuje: " + name + " : " + ctx.getStart());
+                System.out.println("Tento identifikator jiz existuje: " + name + " : " + ctx.getStart());
+                System.exit(1);
             }
             localVariables.put(name, address);
         }
@@ -130,18 +133,22 @@ public class FJPListener extends FJPParserBaseListener{
 
     @Override
     public void exitIds(FJPParser.IdsContext ctx) {
-        int value = DEFAULT_VALUE;
+        int value;
         String id = ctx.ID().getText();
         if(localVariables.containsKey(id)){
             value = localVariables.get(id);
+            instructions.add(PL0InstructionsFactory.getLod(0, value));
         }else if(constants.containsKey(id)){
             value = constants.get(id);
+            instructions.add(PL0InstructionsFactory.getLit(value));
         }else if(variables.containsKey(id)){
             value = variables.get(id);
+            instructions.add(PL0InstructionsFactory.getLod(level, value + base));
         }else{
-            //TODO throw new Exception("Neexitujici identifikator: " + id + " : " + ctx.getStart());
+            System.out.println("Neexitujici identifikator: " + id + " : " + ctx.getStart());
+            System.exit(1);
         }
-        instructions.add(PL0InstructionsFactory.getLod(level, value));
+
     }
 
     @Override
@@ -241,24 +248,32 @@ public class FJPListener extends FJPParserBaseListener{
             instructions.add(PL0InstructionsFactory.getLit(1));
             instructions.add(PL0InstructionsFactory.getOpr(11));
             elseJump = instructions.size();
-            instructions.add(PL0InstructionsFactory.getJmp(0));
+            instructions.add(PL0InstructionsFactory.getJmc(0));
         }
     }
 
     @Override
     public void exitElse_part(FJPParser.Else_partContext ctx) {
-        instructions.set(elseJump, PL0InstructionsFactory.getJmp(instructions.size()));
+        ifJump = instructions.size();
+        instructions.add(PL0InstructionsFactory.getJmp(0));
+        instructions.set(elseJump, PL0InstructionsFactory.getJmc(instructions.size()));
+    }
+
+    @Override
+    public void exitIf_else(FJPParser.If_elseContext ctx) {
+        instructions.set(ifJump, PL0InstructionsFactory.getJmp(instructions.size()));
     }
 
     @Override
     public void exitAssigment(FJPParser.AssigmentContext ctx) {
         String id = ctx.ID().getText();
         if(localVariables.containsKey(id)){
-            instructions.add(PL0InstructionsFactory.getSto(level, localVariables.get(id)));
+            instructions.add(PL0InstructionsFactory.getSto(0, localVariables.get(id)));
         }else if(variables.containsKey(id)){
-            instructions.add(PL0InstructionsFactory.getSto(0, variables.get(id))); //global variable
+            instructions.add(PL0InstructionsFactory.getSto(level, variables.get(id) + base)); //global variable
         }else{
-            //TODO throw new Exception("Neexitujici identifikator: " + id + " : " + ctx.getStart());
+            System.out.println("Neexitujici identifikator: " + id + " : " + ctx.getStart());
+            System.exit(1);
         }
         top--;
     }
@@ -281,9 +296,9 @@ public class FJPListener extends FJPParserBaseListener{
         if(procedures.containsKey(id)){
             Procedure procedure = procedures.get(id);
             instructions.add(PL0InstructionsFactory.getCal(level, procedure.getAddress()));
-            base += procedure.getSize();
         }else{
-            //TODO throw new Exception("Neexitujici procedura: " + id + " : " + ctx.getStart());
+            System.out.println("Neexitujici procedura: " + id + " : " + ctx.getStart());
+            System.exit(1);
         }
     }
 
@@ -335,7 +350,7 @@ public class FJPListener extends FJPParserBaseListener{
 
     private void addVariable(int address, int value) {
         instructions.add(PL0InstructionsFactory.getLit(value));
-        instructions.add(PL0InstructionsFactory.getSto(level, address));
+        instructions.add(PL0InstructionsFactory.getSto(0, address));
     }
 
     public static void main(String[] args) {

@@ -27,7 +27,7 @@ if_else     : IF LPAREN expression RPAREN START (call | assigment | do_while)* E
 else_part   : ELSE;
 assigment   : ID ASSIGN (var | expression) SEMI;
 
-var         : value | ids;
+var         : LPAREN expression RPAREN | value | ids;
 value       : INT_VALUE | BOOLEAN_VALUE;
 ids         : ID;
 expression  : simpleExp ((EQUAL | NOT_EQUAL | LT | LE | GE | GT) simpleExp)*;

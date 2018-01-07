@@ -1,5 +1,5 @@
 start
-    const KONSTANTA := 5;
+    const KONSTANTA := 2;
     int x := 2;
     int y;
     boolean xx := true;
@@ -7,10 +7,11 @@ start
 
     procedure delej (int a)
     start
+        int a := 1;
         int b;
         do
         start
-            x := x * 2 + a * 3;
+            x := x * ((2 + a) * 3);
             a := a + 1;
         end while (a < KONSTANTA)
     end
