@@ -341,6 +341,18 @@ public class FJPListener extends FJPParserBaseListener{
     }
 
     @Override
+    public void enterRe_until(FJPParser.Re_untilContext ctx) {
+        cycleJump = instructions.size();
+    }
+
+    @Override
+    public void exitRe_until(FJPParser.Re_untilContext ctx) {
+        instructions.add(PL0InstructionsFactory.getLit(1));
+        instructions.add(PL0InstructionsFactory.getOpr(10));
+        instructions.add(PL0InstructionsFactory.getJmc(cycleJump));
+    }
+
+    @Override
     public void enterDo_while(FJPParser.Do_whileContext ctx) {
         cycleJump = instructions.size();
     }

@@ -13,6 +13,8 @@ WHILE:          'while';
 DO:             'do';
 IF:             'if';
 ELSE:           'else';
+REPEAT:         'repeat';
+UNTIL:          'until';
 
 
 // separatory

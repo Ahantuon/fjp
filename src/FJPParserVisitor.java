@@ -88,6 +88,12 @@ public interface FJPParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCall(FJPParser.CallContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FJPParser#re_until}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRe_until(FJPParser.Re_untilContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FJPParser#do_while}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -107,6 +107,13 @@ public class FJPParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitRe_until(FJPParser.Re_untilContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitDo_while(FJPParser.Do_whileContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

@@ -19,15 +19,17 @@ variable    : int_var | boolean_var;
 statement   : call
             | assigment
             | assigment_p
+            | re_until
             | do_while
             | while_do
             | if_else;
 
 call        : CALL ID LPAREN var (COMMA var)* RPAREN SEMI;
+re_until    : REPEAT START (call | assigment | assigment_p)* END UNTIL LPAREN expression RPAREN;
 do_while    : DO START (call | assigment | assigment_p)* END WHILE LPAREN expression RPAREN;
 while_do    : WHILE LPAREN expression RPAREN start_do (call | assigment | assigment_p)* END;
 start_do    : START;
-if_else     : IF LPAREN expression RPAREN START (call | assigment | assigment_p | while_do | do_while)* END else_part START (call | assigment | assigment_p | while_do | do_while)* END;
+if_else     : IF LPAREN expression RPAREN START (call | assigment | assigment_p | re_until | while_do | do_while)* END else_part START (call | assigment | assigment_p | re_until | while_do | do_while)* END;
 else_part   : ELSE;
 assigment   : ID (COMMA ID)* ASSIGN (var | expression) SEMI;
 assigment_p : LBRACK ID (COMMA ID)* RBRACK ASSIGN LBRACK (var | expression)(COMMA (var | expression))* RBRACK SEMI;
