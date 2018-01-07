@@ -5,6 +5,7 @@
 \usepackage{graphicx} 
 \usepackage{float}
 \usepackage{enumitem}
+\usepackage{lipsum}
 
 
 \title{Překladač vlastního jazyka do instrukcí PL/0}
@@ -70,6 +71,18 @@ Rozšiřující konstrukce:
 \end{itemize}
 
 \chapter{Syntaxe}
+
+Každý program musí obsahovat vždy základní strukturu. Blok \textbf{main} je výchozí místo spuštění programu, \textbf{start} označuje začátek a \textbf{end} konec bloku. Základní syntaxe vypadá následovně: 
+\begin{verbatim}
+start
+
+    main
+    start
+    
+    end
+end
+\end{verbatim}
+
 
 \section{Proměnné a přiřazení}
 Jazyk je staticky typový, všechny proměnné musíme nejprve deklarovat s jejich datovým typem.\\
@@ -254,6 +267,58 @@ Popis adresářové struktury:
 \item [.] \texttt{FJPParser.g4} - obrahuje gramatiku
 \end{itemize}
 
+\section{Gramatika jazyka}
+\begingroup
+    \fontsize{8pt}{10pt}\selectfont
+\begin{verbatim}
+program     : START constant* globals procedure* main END;
+
+constant    : CONST ID ASSIGN INT_VALUE SEMI;
+globals     : variable*;
+procedure   : PROCEDURE ID LPAREN arguments RPAREN body return_val;
+return_val  : RETURN ID SEMI;
+
+int_var     : INT ID (ASSIGN INT_VALUE)? SEMI;
+boolean_var : BOOLEAN ID (ASSIGN BOOLEAN_VALUE)? SEMI;
+
+arguments   : argument (COMMA argument)*;
+argument    : INT ID | BOOLEAN ID;
+body        : START locales statement* END;
+locales     : variable*;
+variable    : int_var | boolean_var;
+statement   : call
+            | assigment
+            | assigment_p
+            | re_until
+            | do_while
+            | while_do
+            | if_else;
+
+call        : CALL ID LPAREN var (COMMA var)* RPAREN (LPAREN return_id RPAREN)? SEMI;
+return_id   : ID;
+re_until    : REPEAT START (call | assigment | assigment_p)* END UNTIL LPAREN expression RPAREN;
+do_while    : DO START (call | assigment | assigment_p)* END WHILE LPAREN expression RPAREN;
+while_do    : WHILE LPAREN expression RPAREN start_do (call | assigment | assigment_p)* END;
+start_do    : START;
+if_else     : IF LPAREN expression RPAREN 
+                START (call | assigment | assigment_p | re_until | while_do | do_while)* 
+                END else_part START (call | assigment | assigment_p | re_until | while_do | do_while)* END;
+				
+else_part   : ELSE;
+assigment   : ID (COMMA ID)* ASSIGN (var | expression) SEMI;
+assigment_p : LBRACK ID (COMMA ID)* RBRACK ASSIGN 
+                LBRACK (var | expression)(COMMA (var | expression))* RBRACK SEMI;
+
+var         : NEG? LPAREN expression RPAREN | value | ids;
+value       : INT_VALUE | BOOLEAN_VALUE;
+ids         : ID;
+expression  : simpleExp ((EQUAL | NOT_EQUAL | LT | LE | GE | GT) simpleExp)*;
+simpleExp   : term ((ADD | SUB | OR) term)*;
+term        : var ((AND | MUL | DIV) var)*;
+
+main        : MAIN body;
+\end{verbatim}
+\endgroup
 
 \chapter{Vzorové programy a generované instrukce}
 
@@ -448,7 +513,8 @@ Instrukce:
 \chapter{Závěr}
 V semestrální práci byl vytvořen překladač do instrukcí \textbf{PL/0}. Splnily jsme všechny body, které jsme si určily v zadání.
 Syntaxe je originálním mixem syntaxe \textbf{C} a \textbf{Pascalu}.
-Zdrojové kódy jsou k dispozici na githubu: \url{https://github.com/Ahantuon/fjp} 
+\\\\
+Zdrojové kódy jsou k dispozici na githubu:\\ \url{https://github.com/Ahantuon/fjp} 
 
 
 \end{document}
